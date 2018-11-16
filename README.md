@@ -1,4 +1,4 @@
-# MultiUserDrawing
+# M.U.D - Multi User Drawing
 My 1998 Comp Sci dissertation - a client / server Multi User Drawing tool, written in C and Tcl/Tk
 
 This is the source code for my 1998 Computer Science degree disseratation, M.U.D - Multi User Drawing.
