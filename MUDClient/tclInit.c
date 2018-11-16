@@ -1,7 +1,17 @@
+/*	tclInit.c	                                                                            */
+/*	Main initialisation function for the Tcl interpreter and the binding command objects    */
+/*	requests		                                                                        */
+/*                                                                                          */
+/*	Iain Ollerenshaw 16/2/98		                                                        */
+/*                                                                                          */
+/*	Version History:		                                                                */
+/*	Date	    Who	    Comments	                                                        */
+/*	16/2/98     IO      Created 		                                                    */
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <C:\ActiveTcl86\include\tcl.h>
-#include <C:\ActiveTcl86\include\tk.h>
+#include <tcl.h>
+#include <tk.h>
 #include "client.h"
 #include "tclInit.h"
 

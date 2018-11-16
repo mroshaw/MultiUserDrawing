@@ -1,12 +1,14 @@
-/* main.c	*/
-/* Main run routines. Calls init and runs */
-/* server	*/
-/*	*/
-/* lain 011erenshaw 13/10/97	*/
-/* Version Histroy:	*/
-/* Date	Who Comments	*/
-/* 13/10/97	IO	Created	*/
-/*	*/
+/* main.c	                                */
+/* Main run routines. Calls init and runs   */
+/* server	                                */
+/*	                                        */
+/* lain Ollerenshaw 13/10/97	            */
+/*	                                        */
+/* Version History:	                        */
+/* Date     Who     Comments            	*/
+/* 13/10/97	IO	    Created	                */
+/*	                                        */
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>

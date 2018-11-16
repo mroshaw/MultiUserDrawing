@@ -1,8 +1,12 @@
-/* utils.c	*/
-/* This file contains misc functions to perform various functions */
-/* within MUD	*/
-/* lain 011erenshaw	*/
-/* 13/10/97	*/
+/*	utils.c	                                                                                */
+/*  This file contains misc functions to perform various functions                          */
+/*	requests		                                                                        */
+/*                                                                                          */
+/*	Iain Ollerenshaw 16/2/98		                                                        */
+/*	Version History:		                                                                */
+/*	Date	    Who	    Comments	                                                        */
+/*	13/10/97    IO      Created 		                                                    */
+
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>
@@ -106,7 +110,7 @@ char *str_replace(char *orig, char *rep, char *with) {
 
     // count the number of replacements needed
     ins = orig;
-    for (count = 0; tmp = strstr(ins, rep); ++count) {
+    for (count = 0; (tmp = strstr(ins, rep)); ++count) {
         ins = tmp + len_rep;
     }
 

@@ -1,13 +1,15 @@
-/* server.c	*/
-/* Routines for initialising the server.	*/
-/* Does not contain network code, this can be */
-/* found in unixServer.c	*/
-/*	*/
-/* lain 011erenshaw 13/10/97	*/
-/* Version History:	*/
-/* Date	Who Comments	*/
-/* 13/10/97	IO	Created	*/
-/*	*/
+/* server.c	                                    */
+/* Routines for initialising the server.	    */
+/* Does not contain network code, this can be   */
+/* found in unixServer.c	                    */
+/*	                                            */
+/* Iain Ollerenshaw 13/10/97	                */
+/*	                                            */
+/* Version History:                             */
+/* Date     Who     Comments                	*/
+/* 13/10/97	IO  	Created	                    */
+/*	                                            */
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>

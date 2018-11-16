@@ -1,8 +1,12 @@
-/* tcllnit.h	*/
-/* This code initialises the Tcl	*/
-/* Version History:	*/
-/* Version Who Date	Comment	*/
-/* 1.0	IO	10/2/98	Original	*/
-/*	*/
+/*	tclInit.h	                                                                            */
+/*	Main initialisation function for the Tcl interpreter and the binding command objects    */
+/*	requests		                                                                        */
+/*                                                                                          */
+/*	Iain Ollerenshaw 16/2/98		                                                        */
+/*                                                                                          */
+/*	Version History:		                                                                */
+/*	Date	    Who	    Comments	                                                        */
+/*	16/2/98     IO      Created 		                                                    */
+
 int Tcl_AppInit (Tcl_Interp *interp);
 void Command_Init (Tcl_Interp *interp);

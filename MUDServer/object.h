@@ -1,12 +1,14 @@
-/* Routines for handling object storage and */
-/* manipulation. Also defines structure of  */
-/* generic 2D object    */
-/*  */
-/* lain 011erenshaw 13/10/97    */
-/* Version History: */
-/* Date Who Comments    */
-/* 13/10/97 IO  Created */
-/*  */
+/* object.h                                     */
+/* Routines for handling object storage and     */
+/* manipulation                                 */
+/*                                              */
+/* Iain Ollerenshaw 13/10/97                    */
+/*                                              */
+/* Version History:                             */
+/* Date     Who     Comments                    */
+/* 13/10/97 IO      Created                     */
+/*                                              */
+
 /* Define the object structure andthe doubly linked list method with */
 /* which the objects will be stored */
 struct object

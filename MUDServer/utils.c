@@ -1,11 +1,12 @@
-/* utils.c  */
-/* Misc utility functions   */
-/*  */
-/* Iain 011erenshaw 13/10/97    */
-/* Version History: */
-/* Date Who Comments    */
-/* 13/10/97 IO  Created */
-/*  */
+/* utils.c                                  */
+/* Misc utility functions                   */
+/*                                          */
+/* Iain Ollerenshaw 13/10/97                */
+/*                                          */
+/* Version History:                         */
+/* Date     Who     Comments                */
+/* 13/10/97 IO      Created                 */
+/*                                          */
 
 #include <ctype.h>
 #include <stdlib.h>

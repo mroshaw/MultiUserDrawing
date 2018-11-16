@@ -1,11 +1,14 @@
-/* file.c   */ /* Routines for loading, saving a clearing data */
-/* in server    */
-/*  */
-/* lain 011erenshaw 13/10/97    */
-/* Version History: */
-/* Date Who Comments    */
-/* 13/10/97 IO  Created */
-/*  */
+/* file.c                                           */
+/* Routines for loading, saving a clearing data     */
+/* in server                                        */
+/*                                                  */
+/* Iain Ollerenshaw 13/10/97                        */
+/*                                                  */
+/* Version History:                                 */
+/* Date     Who     Comments                        */
+/* 13/10/97 IO      Created                         */
+/*                                                  */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "object.h"

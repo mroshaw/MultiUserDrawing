@@ -1,13 +1,14 @@
-/* unixserver.h	*/
+/* unixserver.h	                        */
 /* Network code for running the server	*/
-/*	*/
-/* Lain 011erenshaw 3/12/97	*/
-/* Version History:	*/
-/* Date	Who Comments	*/
-/* 3/12/97 MND Created	*/
+/*	                                    */
+/* Iain Ollerenshaw 3/12/97	            */
+/*	                                    */
+/* Version History:	                    */
+/* Date     Who     Comments        	*/
+/* 3/12/97  MND     Created             */
+/* 6/12/97  IO	    Altered for MUD	    */
+/*	                                    */
 
-/* 6/12/97 IO	Altered for MUD	*/
-/*	*/
 /* These defines determine the same if the server, the string buffer */
 /* size and the port number to use	*/
 #define BUF_SIZE 1024

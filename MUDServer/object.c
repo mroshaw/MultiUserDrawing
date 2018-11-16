@@ -1,11 +1,14 @@
-/* Routines for handling object storage and */
-/* manipulation */
-/*  */
-/* lain 011erenshaw 13/10/97    */
-/* Version History: */
-/* Date Who Comments    */
-/* 13/10/97 IO  Created */
-/*  */
+/* object.c                                     */
+/* Routines for handling object storage and     */
+/* manipulation                                 */
+/*                                              */
+/* Iain Ollerenshaw 13/10/97                    */
+/*                                              */
+/* Version History:                             */
+/* Date     Who     Comments                    */
+/* 13/10/97 IO      Created                     */
+/*                                              */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

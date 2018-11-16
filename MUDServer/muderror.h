@@ -1,11 +1,12 @@
-/* muderror.h	*/
-/* Error routines for MUD server	*/
-/*	*/
-/* lain 011erenshaw 18/12/97	*/
-/* Version Histroy:	*/
-/* Date	Who Comments	*/
-/* 18/12/97	IO	Created	*/
-/*	*/
+/* muderror.c                           */
+/* Error routines for MUD server        */
+/*                                      */
+/* Iain Ollerenshaw  18/12/97           */
+/* Version History:                     */
+/* Date     Who     Comments            */
+/* 18/12/97 IO      Created             */
+/*                                      */
+
 /* Lets define some error messages for the server to return! */
 #define OKAY	"1"
 #define CREATEERROR	"-1"

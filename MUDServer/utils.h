@@ -1,11 +1,12 @@
-/* utils.h	*/
-/* Misc utility functions	*/
-/*	*/
-/* lain 011erenshaw 13/10/97	*/
-/* Version History:	*/
-/* Date	Who Comments	*/
-/* 13/10/97	IO	Created	*/
-/*	*/
+/* utils.h                                  */
+/* Misc utility functions                   */
+/*                                          */
+/* Iain Ollerenshaw 13/10/97                */
+/*                                          */
+/* Version History:                         */
+/* Date     Who     Comments                */
+/* 13/10/97 IO      Created                 */
+/*                                          */
 
 /* Converts a string to upper case */
 void stringToUpper (char *n1, char *n2);

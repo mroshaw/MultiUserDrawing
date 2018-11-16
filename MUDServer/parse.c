@@ -1,11 +1,12 @@
-/* parse.c  */
-/* Routines for parsing and handling MUDScript */
-/* strings. Also provides debug facilities. */
-/*  */
-/* Iain 011erenshaw 13/10/97    */
-/* Version History: */
-/* Date Who Comments    */
-/* 13/10/97 IO  Created */
+/* parse.c                                          */
+/* Routines for parsing and handling MUDScript      */
+/* strings. Also provides debug facilities.         */
+/*                                                  */
+/* Iain O11erenshaw 13/10/97                        */
+/*                                                  */
+/* Version History:                                 */
+/* Date     Who     Comments                        */
+/* 13/10/97 IO      Created                         */
 
 #include <stdio.h>
 #include <stdlib.h>

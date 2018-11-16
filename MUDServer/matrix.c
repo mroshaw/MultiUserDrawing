@@ -1,12 +1,14 @@
-/* matrix.c */
-/* Matrix routines should we ever want to   */
-/* implement scaling and rotation in server */
-/*  */
-/* lain 011erenshaw 13/10/97    */
-/* Version Histroy: */
-/* Date Who Comments    */
-/* 13/10/97 IO  Created */
-/*  */
+/* matrix.c                                         */
+/* Matrix routines should we ever want to           */
+/* implement scaling and rotation in server         */
+/*                                                  */
+/* Iain Ollerenshaw 13/10/97                        */
+/*                                                  */
+/* Version History:                                 */
+/* Date     Who     Comments                        */
+/* 13/10/97 IO      Created                         */
+/*                                                  */
+
 #include "matrix.h"
 #include <stdio.h>
 #include <math.h>

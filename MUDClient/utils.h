@@ -1,8 +1,12 @@
-/* utils.h */
-/* This file contains misc functions to perform 1 */
-/* within MUD */
-/* Iain 011erenshaw */
-/* 13/10/97 */
+/* utils.h	                                                                        */
+/* This file contains misc functions to perform various functions                   */
+/* requests		                                                                    */
+/*                                                                                  */
+/* Iain Ollerenshaw 16/2/98		                                                    */
+/*                                                                                  */
+/* Version History:		                                                            */
+/* Date	       Who	   Comments	                                                    */
+/* 13/10/97    IO      Created 		                                                */
 
 /* Converts a string to upper case*/
 void stringToUpper (char *nl, char *n2);

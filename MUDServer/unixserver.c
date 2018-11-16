@@ -1,12 +1,13 @@
-/* unixserver.c	*/
+/* unixserver.c	                        */
 /* Network code for running the server	*/
-/*	*/
-/* lain 011erenshaw 3/12/97	*/
-/* Version History:	*/
-/* Date	Who Comments	*/
-/* 3/12/97 MND Created	*/
-/* 6/12/97 IO	Altered for MUD	*/
-/*	*/
+/*	                                    */
+/* Iain Ollerenshaw 3/12/97	            */
+/*	                                    */
+/* Version History:	                    */
+/* Date     Who     Comments        	*/
+/* 3/12/97  MND     Created             */
+/* 6/12/97  IO	    Altered for MUD	    */
+/*	                                    */
 
 #include <errno.h>
 #include <string.h>

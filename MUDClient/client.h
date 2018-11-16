@@ -1,15 +1,17 @@
-/* client.h */
-/* Code to set up Tcl interpreter, initialise */
-/* the Tcl scripts and handle client socket requests */
-/* Iain 011erenshaw 16/2/98 */
-/* Version Histroy: */
-/* Date	Who Comments */
-/* 3/12/98	MND	Created */
-/* 16/2/98	IO	Altered for MUD */
+/* client.h                                                                                 */
+/*	Code to set up Tcl interpreter, initialise the Tcl scripts and handle client socket		*/
+/*	requests		                                                                        */
+/*                                                                                          */
+/*	Iain Ollerenshaw 16/2/98	                                                        	*/
+/*                                                                                          */
+/*	Version History:	                                                                	*/
+/*	Date	Who     Comments	                                                            */
+/*	        MND	    Created	                                                                */
+/*	16/2/98 IO      Altered for MUD		                                                    */
+/*			                                                                                */
 
 #define PORT 1992
-#define SERVER ADDR "localhost"
-
+#define SERVER_ADDR "localhost"
 #define BUF_SIZE 1024
 
 void die();

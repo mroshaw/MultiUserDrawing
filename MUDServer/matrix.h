@@ -1,12 +1,14 @@
-/* matrix.h */
-/* Matrix routines should we ever want to   */
-/* implement scaling and rotation in server */
-/*  */
-/* lain 011erenshaw 13/10/97    */
-/* Version History: */
-/* Date Who Comments    */
-/* 13/10/97 IO  Created */
-/*  */
+/* matrix.h                                         */
+/* Matrix routines should we ever want to           */
+/* implement scaling and rotation in server         */
+/*                                                  */
+/* Iain Ollerenshaw 13/10/97                        */
+/*                                                  */
+/* Version History:                                 */
+/* Date     Who     Comments                        */
+/* 13/10/97 IO      Created                         */
+/*                                                  */
+
 struct point
 {
     float p[3];

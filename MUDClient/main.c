@@ -1,11 +1,13 @@
-/*	main.c	                                                                        	*/
-/*	Code to set up Tcl interpreter, initialise the Tcl scripts and handle client socket		*/
+/*	main.c	                                                                            	*/
+/*	Main function to initiate the client MUD application                            		*/
 /*	requests		                                                                        */
-/*	lain 011erenshaw 16/2/98		                                                        */
+/*                                                                                          */
+/*	Iain Ollerenshaw 16/2/98		                                                        */
+/*                                                                                          */
 /*	Version History:		                                                                */
 /*	Date	    Who	    Comments	                                                        */
 /*	            MND	    Created	                                                            */
-/*	16/2/98	10	Altered for MUD		                                                        */
+/*	16/2/98     IO      Altered for MUD		                                                */
 
 #define USE_INTERP_RESULT
 #define USE_INTERP_ERRORLINE
