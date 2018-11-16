@@ -1,1 +1,44 @@
 # depslib dependency file v1.0
+1542369170 source:c:\users\mrosh\dropbox\code projects\multiuserdrawing\mudclient\client.c
+	<ctype.h>
+	<arpa/inet.h>
+	<errno.h>
+	<string.h>
+	<signal.h>
+	<stdio.h>
+	<stdlib.h>
+	<memory.h>
+	<sys/types.h>
+	<sys/ioctl.h>
+	<netdb.h>
+	<netinet/in.h>
+	<fcntl.h>
+	<sys/socket.h>
+	<tcl.h>
+	<unistd.h>
+	"tclInit.h"
+	"client.h"
+	"utils.h"
+
+1542369234 c:\users\mrosh\dropbox\code projects\multiuserdrawing\mudclient\tclinit.h
+
+1542369226 c:\users\mrosh\dropbox\code projects\multiuserdrawing\mudclient\client.h
+
+1542369244 c:\users\mrosh\dropbox\code projects\multiuserdrawing\mudclient\utils.h
+
+1542369190 source:c:\users\mrosh\dropbox\code projects\multiuserdrawing\mudclient\tclinit.c
+	<stdio.h>
+	<stdlib.h>
+	<tcl.h>
+	<tk.h>
+	"client.h"
+	"tclInit.h"
+
+1542369280 source:c:\users\mrosh\dropbox\code projects\multiuserdrawing\mudclient\utils.c
+	<ctype.h>
+	<stdio.h>
+	<string.h>
+	"utils.h"
+	<stdlib.h>
+	<stddef.h>
+
