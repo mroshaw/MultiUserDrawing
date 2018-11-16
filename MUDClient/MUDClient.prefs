@@ -1,0 +1,4 @@
+ServerName localhost
+PortNum 1992
+printerName none
+upDateRate 10000

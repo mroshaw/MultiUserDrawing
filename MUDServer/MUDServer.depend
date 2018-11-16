@@ -1,0 +1,231 @@
+# depslib dependency file v1.0
+1541793074 source:c:\users\mrosh\google drive\mud code\3 - combined source code\mudserver\muderror.c
+	<stdio.h>
+	"muderror.h"
+
+1541878290 c:\users\mrosh\google drive\mud code\3 - combined source code\mudserver\muderror.h
+
+1541793471 source:c:\users\mrosh\google drive\mud code\3 - combined source code\mudserver\scene.c
+	<stdlib.h>
+	"utils.h"
+	"scene.h"
+	"object.h"
+
+1541884535 c:\users\mrosh\google drive\mud code\3 - combined source code\mudserver\utils.h
+
+1541793814 c:\users\mrosh\google drive\mud code\3 - combined source code\mudserver\scene.h
+
+1541880155 c:\users\mrosh\google drive\mud code\3 - combined source code\mudserver\object.h
+
+1541884820 source:c:\users\mrosh\google drive\mud code\3 - combined source code\mudserver\utils.c
+	<ctype.h>
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	"utils.h"
+	<stddef.h>
+
+1541794183 source:c:\users\mrosh\google drive\mud code\3 - combined source code\mudserver\file.c
+	<stdio.h>
+	<stdlib.h>
+	"object.h"
+	"scene.h"
+	"file.h"
+	"utils.h"
+	"parse.h"
+	"muderror.h"
+
+1541794201 c:\users\mrosh\google drive\mud code\3 - combined source code\mudserver\file.h
+
+1541787518 c:\users\mrosh\google drive\mud code\3 - combined source code\mudserver\parse.h
+
+1541882954 source:c:\users\mrosh\google drive\mud code\3 - combined source code\mudserver\help.c
+	"help.h"
+	<stdio.h>
+
+1541784061 c:\users\mrosh\google drive\mud code\3 - combined source code\mudserver\help.h
+
+1541936123 source:c:\users\mrosh\google drive\mud code\3 - combined source code\mudserver\main.c
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	"object.h"
+	"parse.h"
+	"unixserver.h"
+	"server.h"
+	"file.h"
+	"utils.h"
+	"muderror.h"
+	"scene.h"
+
+1541882694 c:\users\mrosh\google drive\mud code\3 - combined source code\mudserver\unixserver.h
+
+1541880740 c:\users\mrosh\google drive\mud code\3 - combined source code\mudserver\server.h
+
+1541877327 source:c:\users\mrosh\google drive\mud code\3 - combined source code\mudserver\matrix.c
+	"matrix.h"
+	<stdio.h>
+	<math.h>
+
+1541794427 c:\users\mrosh\google drive\mud code\3 - combined source code\mudserver\matrix.h
+
+1541892309 source:c:\users\mrosh\google drive\mud code\3 - combined source code\mudserver\object.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<sys/socket.h>
+	"muderror.h"
+	"matrix.h"
+	"object.h"
+	"utils.h"
+	"server.h"
+	"scene.h"
+
+1541935960 source:c:\users\mrosh\google drive\mud code\3 - combined source code\mudserver\parse.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"server.h"
+	"object.h"
+	"parse.h"
+	"help.h"
+	"utils.h"
+	"file.h"
+	"muderror.h"
+
+1541883779 source:c:\users\mrosh\google drive\mud code\3 - combined source code\mudserver\server.c
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	"server.h"
+	"muderror.h"
+
+1541937450 source:c:\users\mrosh\google drive\mud code\3 - combined source code\mudserver\unixserver.c
+	<errno.h>
+	<string.h>
+	<signal.h>
+	<stdio.h>
+	<stdlib.h>
+	<sys/types.h>
+	<netinet/in.h>
+	<sys/socket.h>
+	<netdb.h>
+	<unistd.h>
+	"unixserver.h"
+	"parse.h"
+
+1541794183 source:c:\mud\mudserver\file.c
+	<stdio.h>
+	<stdlib.h>
+	"object.h"
+	"scene.h"
+	"file.h"
+	"utils.h"
+	"parse.h"
+	"muderror.h"
+
+1541880155 c:\mud\mudserver\object.h
+
+1541793814 c:\mud\mudserver\scene.h
+
+1541794201 c:\mud\mudserver\file.h
+
+1541884535 c:\mud\mudserver\utils.h
+
+1541787518 c:\mud\mudserver\parse.h
+
+1541878290 c:\mud\mudserver\muderror.h
+
+1541936123 source:c:\mud\mudserver\main.c
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	"object.h"
+	"parse.h"
+	"unixserver.h"
+	"server.h"
+	"file.h"
+	"utils.h"
+	"muderror.h"
+	"scene.h"
+
+1541882694 c:\mud\mudserver\unixserver.h
+
+1541880740 c:\mud\mudserver\server.h
+
+1541877327 source:c:\mud\mudserver\matrix.c
+	"matrix.h"
+	<stdio.h>
+	<math.h>
+
+1541794427 c:\mud\mudserver\matrix.h
+
+1541793074 source:c:\mud\mudserver\muderror.c
+	<stdio.h>
+	"muderror.h"
+
+1542136229 source:c:\mud\mudserver\object.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<sys/socket.h>
+	"muderror.h"
+	"matrix.h"
+	"object.h"
+	"utils.h"
+	"server.h"
+	"scene.h"
+
+1542136216 source:c:\mud\mudserver\parse.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"server.h"
+	"object.h"
+	"parse.h"
+	"help.h"
+	"utils.h"
+	"file.h"
+	"muderror.h"
+
+1541784061 c:\mud\mudserver\help.h
+
+1541793471 source:c:\mud\mudserver\scene.c
+	<stdlib.h>
+	"utils.h"
+	"scene.h"
+	"object.h"
+
+1541883779 source:c:\mud\mudserver\server.c
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	"server.h"
+	"muderror.h"
+
+1542065914 source:c:\mud\mudserver\utils.c
+	<ctype.h>
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	"utils.h"
+	<stddef.h>
+
+1541972299 source:c:\mud\mudserver\help.c
+	"help.h"
+	<stdio.h>
+
+1542055317 source:c:\mud\mudserver\unixserver.c
+	<errno.h>
+	<string.h>
+	<signal.h>
+	<stdio.h>
+	<stdlib.h>
+	<sys/types.h>
+	<netinet/in.h>
+	<sys/socket.h>
+	<netdb.h>
+	<unistd.h>
+	"unixserver.h"
+	"parse.h"
+
