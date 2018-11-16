@@ -229,3 +229,104 @@
 	"unixserver.h"
 	"parse.h"
 
+1541794183 source:c:\users\mrosh\dropbox\code projects\multiuserdrawing\mudserver\file.c
+	<stdio.h>
+	<stdlib.h>
+	"object.h"
+	"scene.h"
+	"file.h"
+	"utils.h"
+	"parse.h"
+	"muderror.h"
+
+1541880155 c:\users\mrosh\dropbox\code projects\multiuserdrawing\mudserver\object.h
+
+1541793814 c:\users\mrosh\dropbox\code projects\multiuserdrawing\mudserver\scene.h
+
+1541794201 c:\users\mrosh\dropbox\code projects\multiuserdrawing\mudserver\file.h
+
+1541884535 c:\users\mrosh\dropbox\code projects\multiuserdrawing\mudserver\utils.h
+
+1541787518 c:\users\mrosh\dropbox\code projects\multiuserdrawing\mudserver\parse.h
+
+1541878290 c:\users\mrosh\dropbox\code projects\multiuserdrawing\mudserver\muderror.h
+
+1541972299 source:c:\users\mrosh\dropbox\code projects\multiuserdrawing\mudserver\help.c
+	"help.h"
+	<stdio.h>
+
+1541784061 c:\users\mrosh\dropbox\code projects\multiuserdrawing\mudserver\help.h
+
+1541936123 source:c:\users\mrosh\dropbox\code projects\multiuserdrawing\mudserver\main.c
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	"object.h"
+	"parse.h"
+	"unixserver.h"
+	"server.h"
+	"file.h"
+	"utils.h"
+	"muderror.h"
+	"scene.h"
+
+1541882694 c:\users\mrosh\dropbox\code projects\multiuserdrawing\mudserver\unixserver.h
+
+1541880740 c:\users\mrosh\dropbox\code projects\multiuserdrawing\mudserver\server.h
+
+1541877327 source:c:\users\mrosh\dropbox\code projects\multiuserdrawing\mudserver\matrix.c
+	"matrix.h"
+	<stdio.h>
+	<math.h>
+
+1541794427 c:\users\mrosh\dropbox\code projects\multiuserdrawing\mudserver\matrix.h
+
+1541793074 source:c:\users\mrosh\dropbox\code projects\multiuserdrawing\mudserver\muderror.c
+	<stdio.h>
+	"muderror.h"
+
+1542136229 source:c:\users\mrosh\dropbox\code projects\multiuserdrawing\mudserver\object.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<sys/socket.h>
+	"muderror.h"
+	"matrix.h"
+	"object.h"
+	"utils.h"
+	"server.h"
+	"scene.h"
+
+1542225589 source:c:\users\mrosh\dropbox\code projects\multiuserdrawing\mudserver\parse.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"server.h"
+	"object.h"
+	"parse.h"
+	"help.h"
+	"utils.h"
+	"file.h"
+	"muderror.h"
+
+1541793471 source:c:\users\mrosh\dropbox\code projects\multiuserdrawing\mudserver\scene.c
+	<stdlib.h>
+	"utils.h"
+	"scene.h"
+	"object.h"
+
+1541883779 source:c:\users\mrosh\dropbox\code projects\multiuserdrawing\mudserver\server.c
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	"server.h"
+	"muderror.h"
+
+1542065914 source:c:\users\mrosh\dropbox\code projects\multiuserdrawing\mudserver\utils.c
+	<ctype.h>
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	"utils.h"
+	<stddef.h>
+

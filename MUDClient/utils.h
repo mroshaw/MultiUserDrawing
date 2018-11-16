@@ -19,3 +19,6 @@ int getLine (char *line, int max);
 
 /* Generic procedure to convert integer to a string */
 void my_itoa (int theInt, char theString[]);
+
+/* Replace an occurrence of a string within a string */
+char *str_replace(char *orig, char *rep, char *with);

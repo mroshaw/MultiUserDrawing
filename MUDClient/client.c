@@ -161,11 +161,9 @@ int receiveStringCmd (ClientData clientData, Tcl_Interp *interp, int argc, char 
 /* Open the socket connection */
 int openSocket (short port, char *server)
 {
-	/* struct sockaddr_in our_name; */
+	/* Define the socket structure */
 	struct sockaddr_in our_name;
-	char sendBuffer[BUF_SIZE];
-	char recBuffer[BUF_SIZE];
-	int reclen;
+
 	/* Create a socket which we can connect to. */
 	if ((our_socket = socket(AF_INET,SOCK_STREAM,0)) < 0)
 	{
@@ -180,7 +178,7 @@ int openSocket (short port, char *server)
 	our_name.sin_addr.s_addr = get_host_address(server);
 
 	/* Connect to the named socket. */
-	if (connect(our_socket,&our_name,sizeof(struct sockaddr_in)))
+	if (connect(our_socket,(struct sockaddr *)&our_name,sizeof(struct sockaddr_in)))
 	{
 		fprintf(stderr,"mudClient (open): Cannot connect to the	server.\n");
 		return -1;

@@ -10,57 +10,61 @@
 ###########################################
 global clientId serverIP selectObj currObject portNum serverName printerName
 set clientId 3
-set path "C://MUD//MUDClient//Tcl"
+set scriptPath [ file dirname [ file normalize [ info script ] ] ]
+puts "Determining script path.."
+puts $scriptPath
 
 # source all script files
 puts "Sourcing scripts..."
 puts "splash..."
-source $path/splash.tcl
+source $scriptPath/splash.tcl
 doSplash
 tkwait visibility .splash
 # Make available as proc for debugging
-proc doSource {} {
-    set path "C://MUD//MUDClient//Tcl"
+proc doSource {scriptPath} {
+    
+    puts "Path:"
+    puts $scriptPath
     
     puts "comms.."
-    source $path/comms.tcl
+    source $scriptPath/comms.tcl
     puts "dialogs..."
-    source $path/dialog.tcl
+    source $scriptPath/dialog.tcl
     puts "drawing..."
-    source $path/draw.tcl
+    source $scriptPath/draw.tcl
     puts "prefs..."
-    source $path/getPrefs.tcl
-    source $path/prefs.ui.tcl
+    source $scriptPath/getPrefs.tcl
+    source $scriptPath/prefs.ui.tcl
     puts "errors..."
-    source $path/mudErrors.tcl
+    source $scriptPath/mudErrors.tcl
     puts "objects..."
-    source $path/objects.tcl
+    source $scriptPath/objects.tcl
     puts "printing..."
-    source $path/print.tcl
+    source $scriptPath/print.tcl
     puts "scripts..."
-    source $path/script.tcl
+    source $scriptPath/script.tcl
     puts "server"
-    source $path/server.tcl
+    source $scriptPath/server.tcl
     puts "menu bar..."
-    source $path/menu.ui.tcl
+    source $scriptPath/menu.ui.tcl
     puts "toolbar..."
-    source $path/toolbar.ui.tcl
+    source $scriptPath/toolbar.ui.tcl
     puts "canvas..."
-    source $path/canvas.ui.tcl
+    source $scriptPath/canvas.ui.tcl
     puts "object box..."
-    source $path/objBox.ui.tcl
+    source $scriptPath/objBox.ui.tcl
     puts "editing..."
-    source $path/editBox.ui.tcl
+    source $scriptPath/editBox.ui.tcl
     puts "about..."
-    source $path/about.ui.tcl
+    source $scriptPath/about.ui.tcl
     puts "other boxes..."
-    source $path/scale.ui.tcl
-    source $path/rotate.ui.tcl
+    source $scriptPath/scale.ui.tcl
+    source $scriptPath/rotate.ui.tcl
     puts "Done sourcing..."
     puts ""
 }
 # Do sourcing
-doSource
+doSource $scriptPath
 
 # Initialise prefs
 puts "Getting prefs..."
@@ -126,4 +130,5 @@ catch {destroy .splash}
 
 # This routine should allow us to update the
 # local state every n/1000 seconds
-# Added 5/2/9doUpdateServer
+# Added 5/2/9
+doUpdateServer

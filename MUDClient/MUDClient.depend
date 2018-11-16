@@ -1,0 +1,52 @@
+# depslib dependency file v1.0
+1542367283 source:c:\users\mrosh\dropbox\code projects\multiuserdrawing\mudclient\main.c
+	<stdio.h>
+	<tcl.h>
+	<tk.h>
+	<unistd.h>
+	<limits.h>
+	"utils.h"
+
+1541780111 source:c:\users\mrosh\dropbox\code projects\multiuserdrawing\mudclient\tclinit.c
+	<stdio.h>
+	<stdlib.h>
+	<C:\ActiveTcl86\include\tcl.h>
+	<C:\ActiveTcl86\include\tk.h>
+	"client.h"
+	"tclInit.h"
+
+1541975523 c:\users\mrosh\dropbox\code projects\multiuserdrawing\mudclient\client.h
+
+1541762801 c:\users\mrosh\dropbox\code projects\multiuserdrawing\mudclient\tclinit.h
+
+1542366669 source:c:\users\mrosh\dropbox\code projects\multiuserdrawing\mudclient\utils.c
+	<ctype.h>
+	<stdio.h>
+	<string.h>
+	"utils.h"
+	<stdlib.h>
+	<stddef.h>
+
+1542366688 c:\users\mrosh\dropbox\code projects\multiuserdrawing\mudclient\utils.h
+
+1542366003 source:c:\users\mrosh\dropbox\code projects\multiuserdrawing\mudclient\client.c
+	<ctype.h>
+	<arpa/inet.h>
+	<errno.h>
+	<string.h>
+	<signal.h>
+	<stdio.h>
+	<stdlib.h>
+	<memory.h>
+	<sys/types.h>
+	<sys/ioctl.h>
+	<netdb.h>
+	<netinet/in.h>
+	<fcntl.h>
+	<sys/socket.h>
+	<tcl.h>
+	<unistd.h>
+	"tclInit.h"
+	"client.h"
+	"utils.h"
+

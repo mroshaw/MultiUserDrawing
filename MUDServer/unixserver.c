@@ -33,7 +33,6 @@ int them;
 /* Do the server loop	*/
 void runServer()
 {
-    int on;
     int port;
     int their_namelen;
     int reclen;
@@ -58,7 +57,7 @@ void runServer()
     our_name.sin_addr.s_addr = INADDR_ANY;
 
     /* Assign a name to our socket ... */
-    if (bind(our_socket,&our_name,sizeof(struct sockaddr_in)))
+    if (bind(our_socket,(struct sockaddr *)&our_name,sizeof(struct sockaddr_in)))
     {
         (void)fprintf(stderr,"Error: Failed to bind socket (Error = %d).\n",errno);
         exit(1);
@@ -92,7 +91,7 @@ void runServer()
     while (1)
     {
         /* Got a connection - try and accept it. */
-        if ((them = accept(our_socket,&their_name,&their_namelen))>= 0)
+        if ((them = accept(our_socket,(struct sockaddr *)&their_name,&their_namelen))>= 0)
         {
             /* Excellent - we now have a file descriptor which */
             /* we can read/write/send to.	*/
