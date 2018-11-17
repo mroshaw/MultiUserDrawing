@@ -3,5 +3,6 @@
 	<Workspace title="Workspace">
 		<Project filename="MUDServer/MUDServer.cbp" />
 		<Project filename="MUDClient/MUDClient.cbp" />
+		<Project filename="../CodeBlocks C Projects/UnixSocketServer/UnixSocketServer.cbp" />
 	</Workspace>
 </CodeBlocks_workspace_file>

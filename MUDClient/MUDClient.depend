@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1542369170 source:c:\users\mrosh\dropbox\code projects\multiuserdrawing\mudclient\client.c
+1542405178 source:c:\users\mrosh\dropbox\code projects\multiuserdrawing\mudclient\client.c
 	<ctype.h>
 	<arpa/inet.h>
 	<errno.h>
@@ -22,11 +22,11 @@
 
 1542369234 c:\users\mrosh\dropbox\code projects\multiuserdrawing\mudclient\tclinit.h
 
-1542369226 c:\users\mrosh\dropbox\code projects\multiuserdrawing\mudclient\client.h
+1542402062 c:\users\mrosh\dropbox\code projects\multiuserdrawing\mudclient\client.h
 
 1542369244 c:\users\mrosh\dropbox\code projects\multiuserdrawing\mudclient\utils.h
 
-1542369190 source:c:\users\mrosh\dropbox\code projects\multiuserdrawing\mudclient\tclinit.c
+1542402000 source:c:\users\mrosh\dropbox\code projects\multiuserdrawing\mudclient\tclinit.c
 	<stdio.h>
 	<stdlib.h>
 	<tcl.h>
@@ -41,4 +41,16 @@
 	"utils.h"
 	<stdlib.h>
 	<stddef.h>
+
+1542404154 source:c:\users\mrosh\dropbox\code projects\multiuserdrawing\mudclient\main.c
+	<stdio.h>
+	<tcl.h>
+	<tk.h>
+	<unistd.h>
+	<limits.h>
+	<string.h>
+	"utils.h"
+	"main.h"
+
+1542405367 c:\users\mrosh\dropbox\code projects\multiuserdrawing\mudclient\main.h
 
