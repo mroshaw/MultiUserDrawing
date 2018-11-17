@@ -15,8 +15,11 @@
 #include <stdlib.h>
 #include "server.h"
 #include "muderror.h"
+#include "unixserver.h"
+
 /* Use global server preferences	*/
 extern SDet details;
+
 /* Initialise server	*/
 /* Gets server details and displays welcome message */
 void initServer()
@@ -24,7 +27,8 @@ void initServer()
     /* Get details of server from shcrc file	*/
     getDetails(details);
     fprintf(stdout, "\nServer running\nMaximum connections: %i\n", details->maxUsers);
-    fprintf(stdout, "Welcome to MUDScript!\n");
+    fprintf(stdout, "\nServer Name: %s\nServer Port: %i\n", SERVER_NAME, PORT);
+    fprintf(stdout, "\nWelcome to MUDScript!\n");
 }
 
 /* Get details from MUD Server prefs file */

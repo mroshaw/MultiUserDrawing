@@ -49,8 +49,8 @@ void runServer()
         (void)exit(1);
     }
 
-/* Initialise the socket data structure - we use a port */ /* number which is known to the client and we don't care */
-/* what machine we are running on (INADDR_ANY).	*/
+    /* Initialise the socket data structure - we use a port */ /* number which is known to the client and we don't care */
+    /* what machine we are running on (INADDR_ANY).	*/
     port = PORT;
     our_name.sin_family	= AF_INET;
     our_name.sin_port	= htons(port);
@@ -107,10 +107,10 @@ void runServer()
             /* Result of parse is stored in result	*/
             fprintf(stdout,"Processing: %s\n",buffer);
             parseScript (buffer, result);
-            send(them, result, strlen(result)+1, 0);
+            write(them, result, strlen(result)+1);
             fprintf(stdout,"Reply: %s\n", result);
             /* Close the socket as we have finished with them. */
-            close(them);
+            // close(them);
         }
         else
         {

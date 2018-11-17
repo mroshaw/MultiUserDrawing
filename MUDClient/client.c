@@ -35,12 +35,11 @@
 /* Hold our socket globally for ease	*/
 static int our_socket = 0;
 
-u_long get_host_address(host)
-char *host;
+u_long get_host_address(char *host)
 {
+
 	/* Return the host ID given its name or IP address. */
 	u_long addr;
-
 
 	struct hostent *host_entry;
 	if ((host == NULL) || !host[0])
@@ -52,7 +51,7 @@ char *host;
 		{
 			(void)fprintf(stderr,"Could not find host\"%s\".\n",host);
 			exit(1);
-	}
+        }
 		return addr;
 	}
 	else
@@ -139,6 +138,60 @@ int sendStringCmd (ClientData clientData, Tcl_Interp *interp, int argc, char *ar
     }
 }
 
+int processStringCmd (ClientData clientData, Tcl_Interp *interp, int argc, char *argv[])
+{
+	int thePort;
+	int reclen = 0;
+	static char theString[BUF_SIZE];
+	static char theResult[BUF_SIZE];
+
+	// First, send
+	if (argc != 4) {
+		fprintf(stderr, "Wrong number of args to send! HELP!: %i\n",
+		argc);
+		exit(0);
+	}
+	// Open soecket
+	thePort = atoi (argv[2]);
+	if (openSocket(thePort, argv[3]) == 0)
+    {
+        // Send
+        // send (our_socket, argv[1], BUF_SIZE, 0);
+        write (our_socket, argv[1], BUF_SIZE);
+    }
+    else
+    {
+        fprintf(stderr, "mudClient (sendRevc - send): Cannot connect to the server.\n");
+		interp->result = "-9";
+        return TCL_ERROR;
+    }
+
+    // Artificial delay
+    int wait = 1;
+    while (wait > 0)
+    {
+        wait--;
+    }
+    // Receive response
+    while (reclen == 0)
+    {
+        reclen = read(our_socket,theResult,BUF_SIZE - 2);
+    }
+	if (reclen < 0)
+	{
+        /* Error. Server not responding if (reclen <= 0) */
+        fprintf(stderr, "mudClient (sendRevc - recv): Failed to receive response from server.\n");
+        interp->result = "-9";
+        return TCL_ERROR;
+	}
+	/* String received okay */
+	interp->result=theResult;
+
+	/* Good manners! */
+	closeSocket ();
+	return TCL_OK;
+}
+
 int receiveStringCmd (ClientData clientData, Tcl_Interp *interp, int argc, char *argv[])
 {
 	int reclen = 0;
@@ -199,8 +252,7 @@ void closeSocket()
 int getUIDCmd (ClientData clientData, Tcl_Interp *interp, int argc, char *argv[])
 {
 	static char theId[20];
-	int cId = (int)getuid();
-	/* int cId = 1234; */
+    int cId = (int)getuid();
 	my_itoa(cId, theId);
 	interp->result=theId;
 	return TCL_OK;

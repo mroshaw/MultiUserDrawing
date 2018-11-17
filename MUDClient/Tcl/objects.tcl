@@ -70,7 +70,8 @@ proc makeBox {canpath x1 y1 x2 y2} {
             set objData($name,4) $x2;	# x2
             set objData($name,5) $y2;	# y2
             set objData($name,6) 0;	# layer
-            set objData($name,7) $clientId;	# owner set objData($name,8) 2; # Type
+            set objData($name,7) $clientId;	# owner
+            set objData($name,8) 2; # Type
             lappend objList $name
             # Draw it on the screen!
             drawBox $canpath $name [transX $x1] [transY $y1] [transX $x2] [transY $y2] yellow

@@ -43,4 +43,8 @@ void Command_Init (Tcl_Interp *interp)
 	Tcl_CreateCommand(interp, "receiveString", (Tcl_CmdProc *)receiveStringCmd, (ClientData)NULL, (Tcl_CmdDeleteProc *)NULL);
 	/* Binds the Tcl command getUID TO the C command getUlDCmd */
 	Tcl_CreateCommand(interp, "getUID", (Tcl_CmdProc *)getUIDCmd, (ClientData)NULL, (Tcl_CmdDeleteProc *)NULL);
+	/* Binds the Tcl command sendReceiveString TO the C command processStringCmd */
+	Tcl_CreateCommand(interp, "sendReceiveString", (Tcl_CmdProc *)processStringCmd, (ClientData)NULL, (Tcl_CmdDeleteProc *)NULL);
+
+
 }

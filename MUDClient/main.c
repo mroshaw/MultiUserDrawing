@@ -19,6 +19,7 @@
 #include <limits.h>
 #include <string.h>
 #include "utils.h"
+#include "main.h"
 
 int main(int argc, char *argv[])
 {
@@ -29,6 +30,9 @@ int main(int argc, char *argv[])
 	char *tclInitPath;
 	char const *errorString;
 
+	int cId = (int)getuid();
+	fprintf(stderr, "Weclome to MUD, user: %i\n", cId);
+    fprintf(stderr, "Client Version: %f\n", VERSION);
 	/* Create our Tcl interpreter */
 	myinterp = Tcl_CreateInterp();
 

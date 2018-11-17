@@ -26,5 +26,6 @@ u_long get_host_address();
 int getUIDCmd (ClientData clientData, Tcl_Interp *interp, int argc, char *argv[]);
 int sendStringCmd (ClientData clientData, Tcl_Interp *interp, int argc, char *argv[]);
 int receiveStringCmd (ClientData clientData, Tcl_Interp *interp, int argc, char *argv[]);
+int processStringCmd (ClientData clientData, Tcl_Interp *interp, int argc, char *argv[]);
 void closeSocket ();
 int openSocket (short port, char *server);

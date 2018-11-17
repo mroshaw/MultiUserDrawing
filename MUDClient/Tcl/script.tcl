@@ -25,10 +25,18 @@ proc create {type name args} {
     # This is turn passes the string to the C
     # command stringSendCmd which sends the string to
     # the server.
-    stringSend $theString
-    # We now get the result string from stringReceive
-    set theResult [stringReceive]
-    return $theResult
+    
+    set result [stringSend $theString]
+    if {$result != 0} {
+        dialog .error {Script Error} \
+          {The server is not responding. Please contact your systems administrator and ensure that the server is back up before clicking continue.}\
+          {warning} 0 {Continue}
+        return -1
+    } else {
+        # We now get the result string from stringReceive
+        set theResult [stringReceive]
+        return $theResult
+    }
 }
 
 # Remove an object
@@ -46,10 +54,17 @@ proc delete {name} {
     # This is turn passes the string to the C
     # command stringSendCmd which sends the string to
     # the server.
-    stringSend $theString
-    # We now get the result string from stringReceive
-    set theResult [stringReceive]
-    return $theResult
+   set result [stringSend $theString]
+    if {$result != 0} {
+        dialog .error {Script Error} \
+          {The server is not responding. Please contact your systems administrator and ensure that the server is back up before clicking continue.}\
+          {warning} 0 {Continue}
+        return -1
+    } else {
+        # We now get the result string from stringReceive
+        set theResult [stringReceive]
+        return $theResult
+    }
 }
 
 # Edit basically performs the commit on an object
@@ -70,9 +85,16 @@ proc edit {name args} {
     # This is turn passes the string to the C
     # command stringSendCmd which sends the string to
     # the server.
-    stringSend $theString
-    # We now get the result string from stringReceive set theResult [stringReceive]
-    return $theResult
+   set result [stringSend $theString]
+    if {$result != 0} {
+        dialog .error {Script Error} \
+          {The server is not responding. Please contact your systems administrator and ensure that the server is back up before clicking continue.}\
+          {warning} 0 {Continue}
+        return -1
+    } else {
+        # We now get the result string from stringReceive set theResult [stringReceive]
+        return $theResult
+    }
 }
 
 # Draw. Given a name, returns the current state of the object
@@ -87,25 +109,32 @@ proc draw {name} {
     # This is turn passes the string to the C
     # command stringSendCmd which sends the string to
     # the server.
-    stringSend $theString
-    # We now get the result string from stringReceive set theResult [stringReceive]
-    return $theResult
+    set result [stringSend $theString]
+    if {$result != 0} {
+        dialog .error {Script Error} \
+          {The server is not responding. Please contact your systems administrator and ensure that the server is back up before clicking continue.}\
+          {warning} 0 {Continue}
+        return -1
+    } else {
+        # We now get the result string from stringReceive set theResult [stringReceive]
+        return $theResult
+    }
 }
 
 # Update display from server
 proc doRedraw {} {
-    global objList clientId objData
-    # Clear everything off screen that we don't own
-    set numObj [llength $objList]
-    for {set i 1} {$i < $numObj} {incr i 1} {
-        set objName [lindex $objList $i]
-        if {$objData($objName,7) != $clientId} {
-            .test.canv delete $objName
-        }
-    }
-    # Draw 'em all back from the server
-    # except the ones we own
-    drawAll notOwn
+   global objList clientId objData
+   # Clear everything off screen that we don't own
+   set numObj [llength $objList]
+   for {set i 1} {$i < $numObj} {incr i 1} {
+      set objName [lindex $objList $i]
+      if {$objData($objName,7) != $clientId} {
+         .test.canv delete $objName
+      }
+   }
+   # Draw 'em all back from the server
+   # except the ones we own
+   drawAll notOwn
 }
 
 # This procedure is very importrant. It retrieves all object
@@ -114,150 +143,127 @@ proc doRedraw {} {
 # method states whether we want to update all objects
 # or others apart from our own
 proc drawAll {method} {
-    global clientId
-    global objData objList selectObj
+   global clientId
+   global objData objList selectObj
     
-    set theString ""
-    set theResult ""
-    set count 0
+   set theString ""
+   set theResult ""
+   set count 0
 
-    # First delete the local object list
-    # If the object already exists, delete it
-    # Clear everything off screen that we don't own
-    set test [catch {set numObj [llength $objList]}]
-
-    if {$test != 0} {
-        set numObj 0
-    }
-    for {set i 1} {$i < $numObj} {incr i 1} {
-          set objName [lindex $objList $i]
-          if {$objData($objName,7) != $clientId} {
-            .test.canv delete $objName
+   # First we find the number of objects with DRAWALL
+   set theString [concat $theString $clientId]
+   set theString [concat $theString "DRAWALL"]
+   set test [catch {set numObj [llength $objList]}]
+   
+   set numObjects [stringSendReceive $theString]
+   
+   if {$test != 0} {
+       set numObj 0
+   }
+   for {set i 1} {$i < $numObj} {incr i 1} {
+         set objName [lindex $objList $i]
+         if {$objData($objName,7) != $clientId} {
+           .test.canv delete $objName
+         }
+   }
+   # We now do a loop and get object information # from each object using DRAWBYNUM
+   while {$count <= [expr $numObjects - 1]} {
+      set theString [concat $clientId "DRAWBYNUM" $count]
+      set theResult [stringSendReceive $theString]
+      # Extract the details
+      set name [lindex $theResult 0]
+      set type [lindex $theResult 1]
+      set x1 [lindex $theResult 2]
+      set y1 [lindex $theResult 3]
+      set x2 [lindex $theResult 4]
+      set y2 [lindex $theResult 5]
+      set layer [lindex $theResult 6]
+      set owner [lindex $theResult 7]
+      set text [lindex $theResult 8]
+         
+      if {$owner != $clientId || $method == "all"} {
+          # Setup local state
+          set objData($name,1) $name;	# Name
+          set objData($name,2) $x1;	# x1
+          set objData($name,3) $y1;	# y1
+          set objData($name,4) $x2;	# x2
+          set objData($name,5) $y2;	# y2
+          set objData($name,6) $layer; # layer
+          set objData($name,7) $owner; # owner
+          set objData($name,8) $type;	# type
+          set objData($name,9) $text;	# text string
+          
+          lappend objList $name
+          
+          if {$owner == $clientId} {
+              set colour yellow
+          } elseif {$owner == 0} {
+              set colour green
+          } else {
+              set colour red
           }
+          # Draw it on the screen
+          switch $type {
+              1 {	# Draw a circle
+                  drawCircle .test.canv $name $x1 $y1 $x2 $y2 $colour
+              }
+              2 { # Draw a box
+                  drawBox .test.canv $name $x1 $y1 $x2 $y2  $colour
+              }
+              3 {	# Draw a line
+                  drawLine .test.canv $name $x1 $y1 $x2 $y2 $colour
+              }
+              4 {	# Draw text
+                  drawText .test.canv $name $x1 $y1 $text
+              }
+          }
+      }
+      incr count 1
     }
-
-    # First we find the number of objects with DRAWALL
-    set theString [concat $theString $clientId]
-    set theString [concat $theString "DRAWALL"]
-    
-    stringSend $theString
-    
-    set numObjects [stringReceive]
-
-    # We now do a loop and get object information # from each object using DRAWBYNUM
-    while {$count <= [expr $numObjects - 1]} {
-        set theString [concat $clientId "DRAWBYNUM" $count]
-        stringSend $theString
-        set theResult [stringReceive]
-
-        # Extract the details
-        set name [lindex $theResult 0]
-        set type [lindex $theResult 1]
-        set x1 [lindex $theResult 2]
-        set y1 [lindex $theResult 3]
-        set x2 [lindex $theResult 4]
-        set y2 [lindex $theResult 5]
-        set layer [lindex $theResult 6]
-        set owner [lindex $theResult 7]
-        set text [lindex $theResult 8]
-        if {$owner != $clientId || $method == "all"} {
-            # Setup local state
-            set objData($name,1) $name;	# Name
-            set objData($name,2) $x1;	# x1
-            set objData($name,3) $y1;	# y1
-            set objData($name,4) $x2;	# x2
-            set objData($name,5) $y2;	# y2
-            set objData($name,6) $layer; # layer
-            set objData($name,7) $owner; # owner
-            set objData($name,8) $type;	# type
-            set objData($name,9) $text;	# text string
-            
-            lappend objList $name
-            
-            if {$owner == $clientId} {
-                set colour yellow
-            } elseif {$owner == 0} {
-                set colour green
-            } else {
-                set colour red
-            }
-            # Draw it on the screen
-            switch $type {
-                1 {	# Draw a circle
-                    drawCircle .test.canv $name $x1 $y1 $x2 $y2 $colour
-                }
-                2 { # Draw a box
-                    drawBox .test.canv $name $x1 $y1 $x2 $y2  $colour
-                }
-                3 {	# Draw a line
-                    drawLine .test.canv $name $x1 $y1 $x2 $y2 $colour
-                }
-                4 {	# Draw text
-                    drawText .test.canv $name $x1 $y1 $text
-                }
-            }
-        }
-        incr count 1
-    }
-
-    # Set default object if first run
-    # if {[string length $selectObj] < 1} [
-    #puts "First run"
-    # catch {set selectObj [lindex $objList 1]}
-    # catch {updateBox [lindex $objList 1]}
-    #
-    # Locks an object
-    # Simply create the appropriate MUDScript string
-    # and send it. Returns result
 }
+
 proc lock {name} {
-    global clientId
-    set theString ""
-    set theResult ""
-    set theString [concat $theString $clientId]
-    set theString [concat $theString "LOCK"]
-    set theString [concat $theString $name]
+   global clientId
+   set theString ""
+   set theResult ""
+   set theString [concat $theString $clientId]
+   set theString [concat $theString "LOCK"]
+   set theString [concat $theString $name]
 
-    # String is complete. Now pass to stringSend
-    # This is turn passes the string to the C
-    # command stringSendCmd which sends the string to
-    # the server.
-    stringSend $theString
-
-    # We now get the result string from stringReceive
-    set theResult [stringReceive]
-    return $theResult
+   # String is complete. Now pass to stringSend
+   # This is turn passes the string to the C
+   # command stringSendCmd which sends the string to
+   # the server.
+   set theResult [stringSendReceive $theString]
+   return $theResult
 }
+
 # Unlocks an object
 # Simply create the appropriate MUDScript string
 # and send it. Returns result
 proc unlock {name} {
-    global clientId
-    set theString ""
-    set theResult ""
-    set theString [concat $theString $clientId]
-    set theString [concat $theString "UNLOCK"]
-    set theString [concat $theString $name]
-    
-    # String is complete. Now pass to stringSend
-    # This is turn passes the string to the C
-    # command stringSendCmd which sends the string to
-    # the server.
-    stringSend $theString
-    # We now get the result string from stringReceive
-    set theResult [stringReceive]
-    return $theResult
+   global clientId
+   set theString ""
+   set theResult ""
+   set theString [concat $theString $clientId]
+   set theString [concat $theString "UNLOCK"]
+   set theString [concat $theString $name]
+   
+   # String is complete. Now pass to stringSend
+   # This is turn passes the string to the C
+   # command stringSendCmd which sends the string to
+   # the server.
+   set theResult [stringSendReceive $theString]
+   return $theResult
 }
 
 # Force server to save objects
 proc doSave	{} {
-    global clientId
-    set theString ""
-    set theResult ""
-    set theString [concat $theString $clientId]
-    set theString [concat $theString "SAVE"]
-    stringSend $theString
-    # We now get the result string from stringReceive
-    set theResult [stringReceive]
-    return $theResult
+   global clientId
+   set theString ""
+   set theResult ""
+   set theString [concat $theString $clientId]
+   set theString [concat $theString "SAVE"]
+   set theResult [stringSendReceive $theString]
+   return $theResult
 }

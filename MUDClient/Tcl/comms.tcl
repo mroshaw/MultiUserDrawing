@@ -18,15 +18,26 @@ proc stringSend {theString} {
     
     if [catch {sendString $theString $portNum $serverName} result] {
         puts stderr $result
-        dialog .error {Script Error} \
-        {
-            The server is not responding. Please contact your systems administrator and ensure that the server is back up before clicking continue.
-        }\
-        {warning} 0 {Continue}
+        return $result
     } else {
+        return 0;
         # Command okay. Result in return value
     }
 }
+
+proc stringSendReceive {theString} {
+    global portNum serverName
+    
+    puts $theString
+    
+    if [catch {sendReceiveString $theString $portNum $serverName} result] {
+        return -9
+    } else {
+        # Command okay. Result in return value
+        return $result;
+    }
+}
+
 
 # This procedure calls the recieve C routine and
 # returns the result.
