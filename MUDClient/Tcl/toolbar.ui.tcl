@@ -67,12 +67,12 @@ proc toolbar_ui {root args} {
 
     button $base.lockButt \
     -command {set currObject 7; .tool.currObject configure -text Lock} \
-    -image lockb \
+    -image unlockb \
     -text Lock
     
     button $base.unlockButt \
     -command {set currObject 8; .tool.currObject configure -text Commit} \
-    -image unlockb \
+    -image lockb \
     -text Commit
     
     button $base.deleteButt \
