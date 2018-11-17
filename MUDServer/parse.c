@@ -2,7 +2,8 @@
 /* Routines for parsing and handling MUDScript      */
 /* strings. Also provides debug facilities.         */
 /*                                                  */
-/* Iain O11erenshaw 13/10/97                        */
+/* Ia
+O11erenshaw 13/10/97                        */
 /*                                                  */
 /* Version History:                                 */
 /* Date     Who     Comments                        */
@@ -167,9 +168,7 @@ extern SDet details;
     }
     else if (strcmp("EDIT",command)==0)
     {
-        printf("Before find");
         tempObject = findObject(target);
-        fprintf(stdout, "After find: %s", tempObject->name);
 
         if (tempObject==NULL)
         {
