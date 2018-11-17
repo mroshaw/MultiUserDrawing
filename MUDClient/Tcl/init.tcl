@@ -119,14 +119,14 @@ puts "Tidying up.."
 .tool.currObject configure -text Select
 set selectObj 1
 
+# All done!
+puts "All done! Lets do it!"
+catch {destroy .splash}
+
 # What happens now is that the client sends a request to the server
 # to send it all object data...
 puts "Okay... Getting objects from server..."
 drawAll all
-
-# All done!
-puts "All done! Lets do it!"
-catch {destroy .splash}
 
 # This routine should allow us to update the
 # local state every n/1000 seconds
