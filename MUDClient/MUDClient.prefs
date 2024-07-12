@@ -1,4 +1,4 @@
-ServerName localhost
+ServerName 192.168.1.91
 PortNum 1992
-printerName none
-upDateRate 10000
+printerName
+upDateRate 10

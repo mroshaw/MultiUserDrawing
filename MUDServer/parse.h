@@ -7,7 +7,13 @@
 /* Version History:                                 */
 /* Date     Who     Comments                        */
 /* 13/10/97 IO      Created                         */
+#ifndef PARSE_H
+#define PARSE_H
+#include "serverdetails.h"
 
-void parseScript (char *inString, char *resultString);
-void testParseScript (char *theString);
-void testParse(void);
+void parseScript(char *inString, char *resultString, ServerDetails *serverDetails);
+
+void testParseScript(char *theString, ServerDetails *serverDetails);
+
+void testParse(ServerDetails *serverDetails);
+#endif // PARSE_H

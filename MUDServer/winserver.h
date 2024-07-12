@@ -1,4 +1,4 @@
-/* unixserver.h	                        */
+/* winserver.h	                        */
 /* Network code for running the server	*/
 /*	                                    */
 /* Iain Ollerenshaw 3/12/97	            */
@@ -8,17 +8,29 @@
 /* 3/12/97  MND     Created             */
 /* 6/12/97  IO	    Altered for MUD	    */
 /*	                                    */
-
 /* Routines specific to this server. */
+
+#ifndef WINSERVER_H
+#define WINSERVER_H
+#include "serverdetails.h"
+
 void runServer(ServerDetails *details);
+
 void die();
+
 void welcome();
 
 /* Detect errors */
 void interrupt();
+
 void segmentation();
+
 void bus();
+
 void terminate();
+
 unsigned long get_host_address();
+
 /* Useful system routines. */
 FILE *input();
+#endif // WINSERVER_H

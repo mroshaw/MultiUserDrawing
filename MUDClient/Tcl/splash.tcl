@@ -11,7 +11,7 @@ proc doSplash {} {
     toplevel .splash -class Dialog
     wm geometry .splash =+440+300
     wm title .splash {MUD}
-    image create photo pic -file [file join "C://MUD//MUDClient//Tcl//images//splash2.gif"]
+    image create photo pic -file [file join "./Tcl/images/splash2.gif"]
     label .splash.picture -image pic
     pack .splash.picture
     catch {grab set -global .splash}

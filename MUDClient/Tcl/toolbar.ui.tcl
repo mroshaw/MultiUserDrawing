@@ -12,7 +12,7 @@
 # Create the toolbar
 proc toolbar_ui {root args} {
     global images
-    
+    set currDir [pwd]
     # this treats "." as a special case
     if {$root == "."} {
         set base ""
@@ -23,16 +23,16 @@ proc toolbar_ui {root args} {
     set images "./images"
     frame $base.frame#1
 
-    image create photo arrowb -file [file join "C:/MUD/MUDClient/Tcl/images/arrow.gif"]
-    image create photo polyb -file [file join "C:/MUD/MUDClient/Tcl//images/poly.gif"]
-    image create photo circleb -file [file join "C:/MUD/MUDClient/Tcl//images/circle.gif"]
-    image create photo boxb -file [file join "C:/MUD/MUDClient/Tcl//images/box.gif"]
-    image create photo lineb -file [file join "C:/MUD/MUDClient/Tcl//images/line.gif"]
-    image create photo textb -file [file join "C:/MUD/MUDClient/Tcl//images/text.gif"]
-    image create photo lockb -file [file join "C:/MUD/MUDClient/Tcl//images/lock.gif"]
-    image create photo unlockb -file [file join "C:/MUD/MUDClient/Tcl//images/unlock.gif"]
-    image create photo deleteb -file [file join "C:/MUD/MUDClient/Tcl//images/delete.gif"]
-    image create photo shadeb -file [file join "C:/MUD/MUDClient/Tcl//images/shade.gif"]
+    image create photo arrowb -file [file join "./Tcl/images/arrow.gif"]
+    image create photo polyb -file [file join "./Tcl/images/poly.gif"]
+    image create photo circleb -file [file join "./Tcl/images/circle.gif"]
+    image create photo boxb -file [file join "./Tcl/images/box.gif"]
+    image create photo lineb -file [file join "./Tcl/images/line.gif"]
+    image create photo textb -file [file join "./Tcl/images/text.gif"]
+    image create photo lockb -file [file join "./Tcl/images/lock.gif"]
+    image create photo unlockb -file [file join "./Tcl/images/unlock.gif"]
+    image create photo deleteb -file [file join "./Tcl/images/delete.gif"]
+    image create photo shadeb -file [file join "./Tcl/images/shade.gif"]
     
     button $base.arrowButt \
     -command {set currObject 1; .tool.currObject configure -text  Select} \

@@ -13,6 +13,9 @@
 #define USE_INTERP_ERRORLINE
 
 #include <ctype.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
+#include <netdb.h>
 #include <arpa/inet.h>
 #include <errno.h>
 #include <string.h>
@@ -21,11 +24,7 @@
 #include <stdlib.h>
 #include <memory.h>
 #include <sys/types.h>
-#include <sys/ioctl.h>
-#include <netdb.h>
-#include <netinet/in.h>
 #include <fcntl.h>
-#include <sys/socket.h>
 #include <tcl.h>
 #include <unistd.h>
 #include "tclInit.h"
@@ -252,7 +251,8 @@ void closeSocket()
 int getUIDCmd (ClientData clientData, Tcl_Interp *interp, int argc, char *argv[])
 {
 	static char theId[20];
-    int cId = (int)getuid();
+    /* int cId = (int)getuid(); */
+	int cId = 1;
 	my_itoa(cId, theId);
 	interp->result=theId;
 	return TCL_OK;

@@ -7,5 +7,8 @@
 /* Date     Who     Comments            	*/
 /* 13/10/97	IO  	Created	                */
 /*	                                        */
+#ifndef HELP_H
+#define HELP_H
 
 void doHelp();
+#endif // HELP_H

@@ -11,8 +11,7 @@
 #include "muderror.h"
 
 /* Send an error message to stderr*/
-void sendError (char *error)
-{
+void sendError(char *error) {
     fprintf(stderr, "ERROR: ");
     fprintf(stderr, error);
     fprintf(stderr, "\n");

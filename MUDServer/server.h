@@ -10,17 +10,17 @@
 /* 13/10/97	IO  	Created	                    */
 /*	                                            */
 
-/* Structure to hold server details	*/
-struct sDet
-{
-    int	maxUsers;	/* Maximum number of clients */
-    char file[20];	/* File serviced by server	*/
-    char ip[20];	/* IP address of server	*/
-    int	admId;	/* Admin Id	*/
-};
+/* These defines determine the string buffer size */
 
-typedef struct sDet *SDet;
+#ifndef SERVER_H
+#define SERVER_H
+
+#include "serverdetails.h"
+#define BUF_SIZE 1024
+
 /* Initialise server	*/
-void initServer();
+ServerDetails *initServer(const char *configFileName);
+
 /* Get server details from prefs file	*/
-void getDetails ();
+ServerDetails *getServerConfig(const char *configFileName);
+#endif //SERVER_H

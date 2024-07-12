@@ -9,8 +9,10 @@
 /*                                  */
 
 /* The scene is a doubly linked list of objects */
-struct scene
-{
+#ifndef SCENE_H
+#define SCENE_H
+
+struct scene {
     struct object *start;
     struct object *last;
 };
@@ -18,4 +20,5 @@ struct scene
 typedef struct scene *Scene;
 
 /* Create a new scene   */
-Scene mkScene ();
+Scene mkScene();
+#endif // SCENE_H

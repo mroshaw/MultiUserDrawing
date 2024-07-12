@@ -8,6 +8,8 @@
 /*                                      */
 
 /* Lets define some error messages for the server to return! */
+#ifndef MUDERROR_H
+#define MUDERROR_H
 #define OKAY	"1"
 #define CREATEERROR	"-1"
 #define ENTERERROR	"-2"
@@ -20,6 +22,8 @@
 #define CONNECTERROR "-9"
 
 /* Send an error message to stderr */
-void sendError (char *error);
+void sendError(char *error);
+
 /* Is debugging on?	*/
 #define DEBUG	1
+#endif // MUDERROR_H

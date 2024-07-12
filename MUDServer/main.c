@@ -14,56 +14,59 @@
 #include <stdlib.h>
 #include "object.h"
 #include "parse.h"
+#ifdef __WIN32__
+#include "winserver.h"
+#else
 #include "unixserver.h"
-#include "server.h"
+#endif
 #include "file.h"
 #include "utils.h"
-#include "muderror.h"
 #include "scene.h"
+#include "server.h"
+#include "serverdetails.h"
+
 /* The scene simply represents a doubly linked list of objects */
 /* Contained globally for simplicity	*/
 Scene theScene;
 
-/* As are the server prefs	*/
-SDet details;
-
 /* Run the server application	*/
 int main(int argc, char *argv[])
 {
-    if (argc < 2 || argc > 3)
+    if (argc < 3 || argc > 4)
     {
-        fprintf(stderr, "Usage: mudSery <file>\n");
+        fprintf(stderr, "Usage: mudServ <config_file> <scene_file> [debug]\n");
         exit(0);
     }
 
-    /* Allocate server details	*/
-    details = (SDet) safemalloc (sizeof (struct sDet));
+    /* Get command line params */
+    char *configfile = argv[1];
+    char *scenefile = argv[2];
 
     /* Allocate memory for the scene pointers */
     theScene = (Scene) safemalloc (sizeof (struct scene));;
 
     /* Get server details	*/
-    initServer();
+    ServerDetails *serverDetails = initServer(configfile);
 
     /* Initialise the scene */
     theScene->start = (Object)NULL;
     theScene->last = (Object)NULL;
 
     /* Load up current server file	*/
-    fprintf(stdout, "\nLoading scene from %s\n",argv[1]);
-    load (argv[1]);
-    strcpy(details->file, argv[1]);
+    fprintf(stdout, "\nLoading scene from %s\n",scenefile);
+    load (scenefile);
+
     /* If in debugging, run testParse to allow input	*/
     /* from standard input other wise run server	*/
-    if (argc == 3)
+    if (argc == 4)
     {
-        testParse();
+        testParse(serverDetails);
     }
     else
     {
-        runServer();
+        runServer(serverDetails);
     }
     /* Explicitly save before quitting	*/
-    save (details->file);
+    save (serverDetails->fileName);
     return(0);
 }

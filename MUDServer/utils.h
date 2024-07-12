@@ -9,16 +9,20 @@
 /*                                          */
 
 /* Converts a string to upper case */
-void stringToUpper (char *n1, char *n2);
+#ifndef UTILS_H
+#define UTILS_H
+
+void stringToUpper(char *n1, char *n2);
 
 /* Safe allocation of memory */
 void *safemalloc(size_t size);
 
 /* Convert a string to an integer */
-int stoi (char *n1);
+int stoi(char *n1);
 
 /* Generic procedure to convert integer to a string */
-void my_itoa (int thelnt, char theString[]);
+void my_itoa(int thelnt, char theString[]);
 
 /* Get a line from std input */
-int getLine (char *line, int max);
+int getLine(char *line, int max);
+#endif // UTILS_H

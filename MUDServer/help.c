@@ -11,21 +11,16 @@
 #include "help.h"
 #include <stdio.h>
 
-void doHelp()
-{
+void doHelp() {
     int c;
     FILE *helpFile;
     helpFile = fopen("helpFile.txt", "r");
-    if (!helpFile)
-    {
+    if (!helpFile) {
         fprintf(stdout, "Cannot open help file!");
-	}
-    else
-	{
-	    while ((c=getc(helpFile)) !=EOF)
-		{
-			fprintf(stdout, "%c", c);
-		}
-        fclose (helpFile);
+    } else {
+        while ((c = getc(helpFile)) != EOF) {
+            fprintf(stdout, "%c", c);
+        }
+        fclose(helpFile);
     }
 }

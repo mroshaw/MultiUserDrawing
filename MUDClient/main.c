@@ -17,63 +17,51 @@
 #include <tk.h>
 #include <unistd.h>
 #include <limits.h>
-#include <string.h>
-#include "utils.h"
 #include "main.h"
 
-int main(int argc, char *argv[])
-{
-	Tcl_Interp *myinterp;
-	int error;
-	char workingDir[PATH_MAX];
-	char *cygPath;
-	char *tclInitPath;
-	char const *errorString;
+#include <windows.h>
 
-	int cId = (int)getuid();
-	fprintf(stderr, "Weclome to MUD, user: %i\n", cId);
-    fprintf(stderr, "Client Version: %f\n", VERSION);
-	/* Create our Tcl interpreter */
-	myinterp = Tcl_CreateInterp();
+int main(int argc, char *argv[]) {
+    Tcl_Interp *myinterp;
+    int error;
+    char workingDir[PATH_MAX];
+    char *cygPath;
+    char *tclInitPath;
+    char const *errorString;
 
-	/* Initialise the Tcl and Tk packages	*/
-	error = Tcl_AppInit(myinterp);
-	if (error==TCL_ERROR)
-	{
-	    fprintf(stderr, "Error in AppInit! %i\n", error);
-	    return 0;
-	}
+    /* int cId = (int)getuid(); */
+    int cId = 1;
+    fprintf(stdout, "Weclome to MUD, user: %i\n", cId);
+    fprintf(stdout, "Client Version: %f\n", VERSION);
+    /* Create our Tcl interpreter */
+    myinterp = Tcl_CreateInterp();
 
-	/* Source the init.tcl file and we are done!	*/
-    if (getcwd(workingDir, sizeof(workingDir)) != NULL) {
-        cygPath = str_replace(workingDir, "/cygdrive/c", "C:");
-        fprintf(stderr, "Working directory: %s\n", cygPath);
+    /* Initialise the Tcl and Tk packages	*/
+    error = Tcl_AppInit(myinterp);
+    if (error == TCL_ERROR) {
+        fprintf(stderr, "Error in AppInit! %i\n", error);
+        return 0;
     }
-    else
-    {
-        fprintf(stderr, "Failed to get working directory. Using root . ");
-        cygPath = ".";
-    }
+
 
     /* Get Tcl dir */
-    tclInitPath = strcat(cygPath, "/Tcl/init.tcl");
-    fprintf(stderr, "TCL init path: %s\n", tclInitPath);
-
-	// error = Tcl_EvalFile(myinterp, "C:\\MUD\\MUDClient\\Tcl\\init.tcl");
+    TCHAR currdir[255];
+    DWORD dwRet;
+    dwRet = GetCurrentDirectory(255, currdir);
+    // fprintf(stdout, "Current directory: %s\n", currdir);
+    tclInitPath = strcat(currdir, "/Tcl/init.tcl");
+    fprintf(stdout, "TCL init path: %s\n", tclInitPath);
     error = Tcl_EvalFile(myinterp, tclInitPath);
 
     /* If we get a Tcl parse error, display the detail and fail nicely */
-	if (error==TCL_ERROR)
-    {
+    if (error == TCL_ERROR) {
         errorString = Tcl_GetStringResult(myinterp);
         fprintf(stderr, "Error in eval!\nPlease contact ioadcs.stand.ac.uk for help! %i\n", error);
         fprintf(stderr, "%s\n", errorString);
         return 0;
-    }
-    else
-    {
+    } else {
         // Run the Tk loop until user quites
         Tk_MainLoop();
     }
-	return 0;
+    return 0;
 }

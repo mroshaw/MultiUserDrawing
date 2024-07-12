@@ -11,12 +11,10 @@
 #include <stdlib.h>
 #include "utils.h"
 #include "scene.h"
-#include "object.h"
 
 /* Create a new scene   */
-Scene mkScene ()
-{
-    Scene theScene = (Scene) safemalloc (sizeof(struct scene));
+Scene mkScene() {
+    Scene theScene = (Scene) safemalloc(sizeof(struct scene));
     theScene->start = NULL;
     theScene->last = NULL;
     return theScene;
