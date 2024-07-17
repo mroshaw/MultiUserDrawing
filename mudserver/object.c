@@ -24,7 +24,6 @@
 #include "server.h"
 #include "scene.h"
 extern Scene global_scene;
-extern int them;
 
 /* Finds an object in a scene. Returns NULL if not found.   */
 Object find_object(char *name) {
@@ -202,7 +201,7 @@ void copy_objects(int clientId, Object source_object, Object target_object, char
 /* Private debug procedure  */
 void print_object(Object object_to_print) {
     if (object_to_print == NULL) {
-        fprintf(stderr,"PRINTOBJECT: Object is NULL\n");
+        fprintf(stderr, "PRINTOBJECT: Object is NULL\n");
     } else {
         fprintf(stdout, "\n");
         fprintf(stdout, "Object type : %i\n", object_to_print->type);
@@ -247,43 +246,44 @@ int unlock_object(int client_id, Object object_to_unlock) {
 }
 
 /* Construct a string to send to the client */
-void draw_object(Object object_to_draw, char *result) {
+void draw_object(Object object_to_draw, char *result_string) {
     /* Create the server string    */
     /* String is of the form:    */
     /* name, type, x1, y1, width, height, layer, locked */
     /* Client can use this information for manipulation purposes */
     char temp[20] = "";
-    strcpy(result, object_to_draw->name);
-    strcat(result, " ");
+    strcpy(result_string, object_to_draw->name);
+    strcat(result_string, " ");
     int_to_string(object_to_draw->type, temp);
-    strcat(result, temp);
-    strcat(result, " ");
+    strcat(result_string, temp);
+    strcat(result_string, " ");
     int_to_string(object_to_draw->x1, temp);
-    strcat(result, temp);
-    strcat(result, " ");
+    strcat(result_string, temp);
+    strcat(result_string, " ");
     int_to_string(object_to_draw->y1, temp);
-    strcat(result, temp);
-    strcat(result, " ");
+    strcat(result_string, temp);
+    strcat(result_string, " ");
     int_to_string(object_to_draw->x2, temp);
-    strcat(result, temp);
-    strcat(result, " ");
+    strcat(result_string, temp);
+    strcat(result_string, " ");
     int_to_string(object_to_draw->y2, temp);
-    strcat(result, temp);
-    strcat(result, " ");
+    strcat(result_string, temp);
+    strcat(result_string, " ");
     int_to_string(object_to_draw->layer, temp);
-    strcat(result, temp);
-    strcat(result, " ");
+    strcat(result_string, temp);
+    strcat(result_string, " ");
     int_to_string(object_to_draw->locked, temp);
-    strcat(result, temp);
-    strcat(result, " ");
-    strcat(result, object_to_draw->text);
-    send(them, result, strlen(result) + 1, 0);
+    strcat(result_string, temp);
+    strcat(result_string, " ");
+    strcat(result_string, object_to_draw->text);
+    // send(them, result, strlen(result) + 1, 0);
 }
 
 /* Alters the object obji by replacing the attributes with the one given. To alter */
 /* less attributes at a time, simply pass the existing ones in too. */
 /* If layer is different, re-arrange in list to maintain order by layer */
-int edit_object(int client_id, Object object_to_edit, int new_x1, int new_y1, int new_x2, int new_y2, int new_layer, char *new_name) {
+int edit_object(int client_id, Object object_to_edit, int new_x1, int new_y1, int new_x2, int new_y2, int new_layer,
+                char *new_name) {
     if (object_to_edit->locked == client_id) {
         /* Different layer, so delete object an re-insert in correct position    */
         if (object_to_edit->layer != new_layer) {

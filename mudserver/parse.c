@@ -44,7 +44,7 @@ void parse_script(char *script_string, char *result_string, ServerConfig *server
     /* Result of a procedure    */
     int result;
 
-    printf("Parsing: %s\n", script_string);
+    // fprintf(stdout, "Parsing: %s\n", script_string);
 
     /* These objects can be used privately by any of the func below. Such */
     /* as find_object and copy_objects
@@ -56,7 +56,8 @@ void parse_script(char *script_string, char *result_string, ServerConfig *server
     strcpy(result_string, "-9");
     /* fprintf(stdout, "Now processing: %s/n", script_string);*/
     /* Retrieve the parameters. */
-    sscanf(script_string, "%i %s %s %s %i %i %i %i %i %s", &client_id, command, target, &arg1, &arg2, &arg3, &arg4, &arg5,
+    sscanf(script_string, "%i %s %s %s %i %i %i %i %i %s", &client_id, command, target, &arg1, &arg2, &arg3, &arg4,
+           &arg5,
            &arg6, label_text);
 
     /* Convert to upper case for ease   */
@@ -192,7 +193,7 @@ void parse_script(char *script_string, char *result_string, ServerConfig *server
     } else if (strcmp("HELP", command) == 0) {
         show_help();
     } else if (strcmp("EXIT", command) == 0) {
-        printf("Bye bye!");
+        fprintf(stdout, "Bye bye!");
         save_scene(server_config->file_name);
         exit(0);
     } else {
@@ -205,7 +206,7 @@ void parse_script(char *script_string, char *result_string, ServerConfig *server
 void test_parse_script(char *script_string, ServerConfig *server_config) {
     char result[255];
     parse_script(script_string, result, server_config);
-    printf("Result: %s\n", result);
+    fprintf(stdout, "Result: %s\n", result);
 }
 
 /* Allows us to test the server without a connection */
@@ -213,7 +214,7 @@ void test_parse(ServerConfig *server_config) {
     char input_string[255];
     strcpy(input_string, "");
     while (strcmp(input_string, "EXIT\n") != 0) {
-        printf("& ");
+        fprintf(stdout,">> ");
         get_line(input_string, 255);
         test_parse_script(input_string, server_config);
     }

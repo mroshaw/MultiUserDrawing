@@ -48,7 +48,7 @@ SOCKET server_connect(char *server_ip, char *server_port) {
     // Initialize Winsock
     winsock_result = WSAStartup(MAKEWORD(2, 2), &wsa_data);
     if (winsock_result != 0) {
-        printf("WSAStartup failed with error: %d\n", winsock_result);
+        fprintf(stderr, "WSAStartup failed with error: %d\n", winsock_result);
         return INVALID_SOCKET;
     }
 
@@ -60,7 +60,7 @@ SOCKET server_connect(char *server_ip, char *server_port) {
     // Resolve the server address and port
     winsock_result = getaddrinfo(server_ip, server_port, &hints, &result);
     if (winsock_result != 0) {
-        printf("getaddrinfo failed with error: %d\n", winsock_result);
+        fprintf(stderr, "getaddrinfo failed with error: %d\n", winsock_result);
         WSACleanup();
         return 1;
     }
@@ -71,7 +71,7 @@ SOCKET server_connect(char *server_ip, char *server_port) {
         global_socket = socket(ptr->ai_family, ptr->ai_socktype,
                                ptr->ai_protocol);
         if (global_socket == INVALID_SOCKET) {
-            printf("socket failed with error: %ld\n", WSAGetLastError());
+            fprintf(stderr, "socket failed with error: %ld\n", WSAGetLastError());
             WSACleanup();
             return INVALID_SOCKET;
         }
@@ -89,7 +89,7 @@ SOCKET server_connect(char *server_ip, char *server_port) {
     freeaddrinfo(result);
 
     if (global_socket == INVALID_SOCKET) {
-        printf("Unable to connect to server!\n");
+        fprintf(stderr, "Unable to connect to server!\n");
         WSACleanup();
         return INVALID_SOCKET;
     }
@@ -102,7 +102,7 @@ int server_disconnect(SOCKET connect_socket) {
 
     int winsock_result = shutdown(connect_socket, SD_SEND);
     if (winsock_result == SOCKET_ERROR) {
-        printf("shutdown failed with error: %d\n", WSAGetLastError());
+        fprintf(stderr, "shutdown failed with error: %d\n", WSAGetLastError());
         closesocket(connect_socket);
         WSACleanup();
         return 1;
@@ -118,24 +118,24 @@ int server_disconnect(SOCKET connect_socket) {
 int server_send(SOCKET connect_socket, char *send_buf) {
     int winsock_result = send(connect_socket, send_buf, DEFAULT_BUFLEN, 0);
     if (winsock_result == SOCKET_ERROR) {
-        printf("send failed with error: %d\n", WSAGetLastError());
+        fprintf(stderr, "send failed with error: %d\n", WSAGetLastError());
         closesocket(connect_socket);
         WSACleanup();
         return 1;
     }
 
-    printf("\nClient sent: %s\n", send_buf);
+    fprintf(stdout, "\nClient sent: %s\n", send_buf);
     return 0;
 }
 
 int server_receive(SOCKET connect_socket, char *rec_buf) {
     int winsock_result = recv(connect_socket, rec_buf, DEFAULT_BUFLEN, 0);
     if (winsock_result > 0) {
-        printf("Message received: %s\n", rec_buf);
+        fprintf(stdout, "Message received: %s\n", rec_buf);
     } else if (winsock_result == 0) {
-        printf("Connection closed\n");
+        fprintf(stdout, "Connection closed\n");
     } else {
-        printf("recv failed with error: %d\n", WSAGetLastError());
+        fprintf(stderr, "recv failed with error: %d\n", WSAGetLastError());
     }
     return winsock_result;
 }
@@ -143,7 +143,7 @@ int server_receive(SOCKET connect_socket, char *rec_buf) {
 int server_send_receive(SOCKET connect_socket, char *send_buf, char *rec_buf) {
     int winsock_result = send(connect_socket, send_buf, DEFAULT_BUFLEN, 0);
     if (winsock_result == SOCKET_ERROR) {
-        printf("send failed with error: %d\n", WSAGetLastError());
+        fprintf(stderr, "send failed with error: %d\n", WSAGetLastError());
         closesocket(connect_socket);
         WSACleanup();
         return winsock_result;
@@ -151,13 +151,12 @@ int server_send_receive(SOCKET connect_socket, char *send_buf, char *rec_buf) {
 
     winsock_result = recv(connect_socket, rec_buf, DEFAULT_BUFLEN, 0);
     if (winsock_result > 0) {
-        printf("Bytes received: %d\n", winsock_result);
-        printf("Message received: %s\n", rec_buf);
+        fprintf(stdout, "Message received: %s\n", rec_buf);
     } else if (winsock_result == 0)
-        printf("Connection closed\n");
+        fprintf(stdout, "Connection closed\n");
     else
-        printf("recv failed with error: %d\n", WSAGetLastError());
-    printf("Command processed.\n");
+        fprintf(stderr, "recv failed with error: %d\n", WSAGetLastError());
+    fprintf(stdout, "Command processed.\n");
 
     return winsock_result;
 }
@@ -172,9 +171,8 @@ int close_client_cmd(ClientData client_data, Tcl_Interp *interp, int argc, char 
 /* which facilitates communication between the GUI layer and the client */
 /* C layer	*/
 int send_string_cmd(ClientData client_data, Tcl_Interp *interp, int argc, char *argv[]) {
-    fprintf(stdout, "In: send_string_cmd'");
     if (argc != 4) {
-        fprintf(stderr, "Wrong number of args to 'send_string_cmd'! HELP!: %i\n",
+        fprintf(stderr, "Wrong number of args to 'send_string_cmd'!: %i\n",
                 argc);
         exit(0);
     }
@@ -188,7 +186,6 @@ int send_string_cmd(ClientData client_data, Tcl_Interp *interp, int argc, char *
 }
 
 int process_string_cmd(ClientData client_data, Tcl_Interp *interp, int argc, char *argv[]) {
-    fprintf(stdout, "In: process_string_cmd'");
     char recbuf[DEFAULT_BUFLEN];
     int winsock_result = server_send(global_socket, argv[1]);
     if (winsock_result != 0) {
@@ -198,14 +195,11 @@ int process_string_cmd(ClientData client_data, Tcl_Interp *interp, int argc, cha
     if (winsock_result < 0) {
         return TCL_ERROR;
     }
-    fprintf(stdout, "process_string_cmd successful. %s", recbuf);
     Tcl_SetResult(interp, recbuf, TCL_VOLATILE );
     return TCL_OK;
 }
 
 int receive_string_cmd(ClientData client_data, Tcl_Interp *interp, int argc, char *argv[]) {
-    fprintf(stdout, "In: receive_string_cmd'");
-
     // Send an initial buffer
     char recbuf[DEFAULT_BUFLEN];
     int winsock_result = server_receive(global_socket, recbuf);

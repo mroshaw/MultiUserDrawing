@@ -56,7 +56,8 @@ int lock_object(int client_id, Object object_to_lock);
 
 int unlock_object(int client_id, Object object_to_unlock);
 
-void draw_object(Object object_to_draw, char *result) ;
+void draw_object(Object object_to_draw, char *result_string);
 
-int edit_object(int client_id, Object object_to_edit, int new_x1, int new_y1, int new_x2, int new_y2, int new_layer, char *new_name);
+int edit_object(int client_id, Object object_to_edit, int new_x1, int new_y1, int new_x2, int new_y2, int new_layer,
+                char *new_name);
 #endif // OBJECT_H

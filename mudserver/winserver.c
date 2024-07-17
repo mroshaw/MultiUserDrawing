@@ -5,7 +5,6 @@
 #include <windows.h>
 #include <winsock2.h>
 #include <ws2tcpip.h>
-#include <stdlib.h>
 #include <stdio.h>
 #include <process.h>
 #include "winserver.h"
@@ -21,7 +20,6 @@
 
 #define DEFAULT_BUFLEN 512
 
-int them;
 
 int run_server(ServerConfig *server_config) {
     WSADATA wsa_data;
@@ -36,7 +34,7 @@ int run_server(ServerConfig *server_config) {
     // Initialize Winsock
     winsock_result = WSAStartup(MAKEWORD(2, 2), &wsa_data);
     if (winsock_result != 0) {
-        printf("WSAStartup failed with error: %d\n", winsock_result);
+        fprintf(stderr, "WSAStartup failed with error: %d\n", winsock_result);
         return winsock_result;
     }
 
@@ -49,7 +47,7 @@ int run_server(ServerConfig *server_config) {
     // Resolve the server address and server_port
     winsock_result = getaddrinfo(NULL, server_config->server_port, &hints, &result);
     if (winsock_result != 0) {
-        printf("getaddrinfo failed with error: %d\n", winsock_result);
+        fprintf(stderr,"getaddrinfo failed with error: %d\n", winsock_result);
         WSACleanup();
         return winsock_result;
     }
@@ -57,7 +55,7 @@ int run_server(ServerConfig *server_config) {
     // Create a SOCKET for the server to listen for client connections.
     listen_socket = socket(result->ai_family, result->ai_socktype, result->ai_protocol);
     if (listen_socket == INVALID_SOCKET) {
-        printf("socket failed with error: %d\n", WSAGetLastError());
+        fprintf(stderr, "socket failed with error: %d\n", WSAGetLastError());
         freeaddrinfo(result);
         WSACleanup();
         return winsock_result;
@@ -66,7 +64,7 @@ int run_server(ServerConfig *server_config) {
     // Setup the TCP listening socket
     winsock_result = bind(listen_socket, result->ai_addr, (int) result->ai_addrlen);
     if (winsock_result == SOCKET_ERROR) {
-        printf("bind failed with error: %d\n", WSAGetLastError());
+        fprintf(stderr, "bind failed with error: %d\n", WSAGetLastError());
         freeaddrinfo(result);
         cleanup_server(listen_socket);
         return winsock_result;
@@ -74,13 +72,13 @@ int run_server(ServerConfig *server_config) {
 
     freeaddrinfo(result);
 
-    printf("Server listening on port: %s\n", server_config->server_port);
+    fprintf(stdout, "Server listening on port: %s\n", server_config->server_port);
 
     while (true) {
         winsock_result = listen(listen_socket, SOMAXCONN);
-        printf("Waiting for client connection...\n");
+        fprintf(stdout, "Waiting for client connection...\n");
         if (winsock_result == SOCKET_ERROR) {
-            printf("listen failed with error: %d\n", WSAGetLastError());
+            fprintf(stderr, "listen failed with error: %d\n", WSAGetLastError());
             cleanup_server(listen_socket);
             return winsock_result;
         }
@@ -88,12 +86,12 @@ int run_server(ServerConfig *server_config) {
         // Accept a client socket
         client_socket = accept(listen_socket, NULL, NULL);
         if (client_socket == INVALID_SOCKET) {
-            printf("accept failed with error: %d\n", WSAGetLastError());
+            fprintf(stderr, "accept failed with error: %d\n", WSAGetLastError());
             cleanup_server(listen_socket);
             return winsock_result;
         }
 
-        printf("Client connected. Dispatching thread.\n");
+        fprintf(stdout, "Client connected. Dispatching thread.\n");
 
         // Issue a thread to manage this client
         ThreadParams thread_params;
@@ -101,15 +99,15 @@ int run_server(ServerConfig *server_config) {
         thread_params.server_config = server_config;
 
         unsigned thread_id;
-        HANDLE hThread = (HANDLE)_beginthreadex(NULL, 0, &client_session, (void*)&thread_params, 0, &thread_id);
-        printf("Thread dispatched: %i\n", thread_id);
+        HANDLE hThread = (HANDLE) _beginthreadex(NULL, 0, &client_session, (void *) &thread_params, 0, &thread_id);
+        fprintf(stdout, "Thread dispatched: %i\n", thread_id);
     }
 }
 
 unsigned __stdcall client_session(void *params_data) {
     // Receive until the peer shuts down the connection
 
-    ThreadParams *thread_params = (ThreadParams*)params_data;
+    ThreadParams *thread_params = (ThreadParams *) params_data;
     SOCKET client_socket = thread_params->client_socket;
     ServerConfig *server_config = thread_params->server_config;
     int winsock_result;
@@ -120,28 +118,29 @@ unsigned __stdcall client_session(void *params_data) {
 
         winsock_result = recv(client_socket, rec_buf, DEFAULT_BUFLEN, 0);
         if (winsock_result > 0) {
-            printf("Message received: %s\n", rec_buf);
+            fprintf(stdout, "Message received: %s\n", rec_buf);
 
             parse_script(rec_buf, parsereplybuf, server_config);
 
-            printf("Parse result: %s\n", parsereplybuf);
+            fprintf(stdout, "Parse result: %s\n", parsereplybuf);
 
             winsock_result = send(client_socket, parsereplybuf, DEFAULT_BUFLEN, 0);
             if (winsock_result == SOCKET_ERROR) {
-                printf("send failed with error: %d\n", WSAGetLastError());
+                fprintf(stderr, "send failed with error: %d\n", WSAGetLastError());
                 cleanup_client(client_socket);
             }
             // printf("Bytes sent: %d\n", iSendResult);
-            printf("Response sent: %s\n", parsereplybuf);
+            fprintf(stderr, "Response sent: %s\n", parsereplybuf);
         } else if (winsock_result == 0) {
-            printf("Client disconnected.\n");
+            fprintf(stderr, "Client disconnected.\n");
             return 0;
-        }
-        else {
-            printf("recv failed with error: %d\n", WSAGetLastError());
+        } else {
+            fprintf(stderr, "recv failed with error: %d\n", WSAGetLastError());
             cleanup_client(client_socket);
         }
     } while (winsock_result > 0);
+
+    return 0;
 }
 
 void cleanup_client(SOCKET client_socket) {
