@@ -45,8 +45,8 @@ void Command_Init(Tcl_Interp *interp)
         (Tcl_CmdProc *) get_uid_cmd,           (ClientData) NULL, (Tcl_CmdDeleteProc *) NULL);
     Tcl_CreateCommand(interp, "sendReceiveString",
         (Tcl_CmdProc *) process_string_cmd,    (ClientData) NULL, (Tcl_CmdDeleteProc *) NULL);
-    Tcl_CreateCommand(interp, "openClient",
-        (Tcl_CmdProc *) open_socket_cmd,       (ClientData) NULL, (Tcl_CmdDeleteProc *) NULL);
-    Tcl_CreateCommand(interp, "closeClient",
-        (Tcl_CmdProc *) close_socket_cmd,      (ClientData) NULL, (Tcl_CmdDeleteProc *) NULL);
+    Tcl_CreateCommand(interp, "connectToServer",
+        (Tcl_CmdProc *) connect_to_server_cmd,       (ClientData) NULL, (Tcl_CmdDeleteProc *) NULL);
+    Tcl_CreateCommand(interp, "disconnectFromServer",
+        (Tcl_CmdProc *) disconnect_from_server_cmd,      (ClientData) NULL, (Tcl_CmdDeleteProc *) NULL);
 }

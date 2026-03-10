@@ -166,7 +166,7 @@ proc doQuit {} {
         cancelUpdate
 
         # Close the server socket
-        closeConnection
+        disconnectFromServer
 
         # Destroy all windows and terminate destroy .
         destroy .

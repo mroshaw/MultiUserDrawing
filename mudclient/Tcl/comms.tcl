@@ -1,65 +1,76 @@
-##########################################
+###########################################
 # comms.tcl
 # Provides Tcl commands for sending/receiving
 # strings from server. Directly communicates
 # with bound C equivalents.
 # Iain Ollerenshaw 17/2/98
 # Version History:
-# Date	Who Comments
-# 17/2/98	IO	Created
+# Date  Who Comments
+# 17/2/98   IO  Created
+# 2024      IO  Persistent connection support
 ###########################################
-# This proc sends a string mudString to the client C routine
-# which forwards this to the server
 
-proc stringSend {theString} {
+# Connect to the server once at startup
+proc serverConnect {} {
     global portNum serverName
-    
-    puts $theString
-    
-    if [catch {sendString $theString $portNum $serverName} result] {
-        puts stderr $result
-        return $result
-    } else {
-        return 0;
-        # Command okay. Result in return value
-    }
-}
-
-proc stringSendReceive {theString} {
-    global portNum serverName
-    
-    puts $theString
-    
-    if [catch {sendReceiveString $theString $portNum $serverName} result] {
+    # puts stdout "Connecting to server $serverName:$portNum..."
+    if [catch {connectToServer $portNum $serverName} result] {
+        puts stderr "Failed to connect to server: $result"
+        tk_messageBox \
+            -message "Cannot connect to server $serverName:$portNum" \
+            -type ok \
+            -icon error
         return -9
     } else {
-        # Command okay. Result in return value
-        return $result;
+        # puts stdout "Connected to server $serverName:$portNum"
+        return 0
     }
 }
 
+# Disconnect from the server on quit
+proc serverDisconnect {} {
+    catch {disconnectFromServer}
+    puts stdout "Disconnected from server."
+}
 
-# This procedure calls the recieve C routine and
-# returns the result.
-proc stringReceive {} {
-    if [catch {receiveString} result ] {
-        return "-9"
+# Send a string to the server (no response expected)
+proc stringSend {theString} {
+    # puts stdout $theString
+    if [catch {sendString $theString} result] {
+        puts stderr "stringSend error: $result"
+        return -9
     } else {
-        # Command okay. Result in return value
+        return 0
+    }
+}
+
+# Send a string to the server and receive a response
+proc stringSendReceive {theString} {
+    # puts stdout $theString
+    if [catch {sendReceiveString $theString} result] {
+        puts stderr "stringSendReceive error: $result"
+        return -9
+    } else {
         return $result
     }
 }
 
-proc closeConnection {} {
-    closeClient
+# Receive a string from the server
+proc stringReceive {} {
+    if [catch {receiveString} result] {
+        puts stderr "stringReceive error: $result"
+        return -9
+    } else {
+        return $result
+    }
 }
 
-# This procedure retreives the current users id
+# Get the current user's ID
 proc getID {} {
-    if [catch {getUID} result ] {
-        puts stderr $result
-    } else  {
-        # Command okay. Result in return value
+    if [catch {getUID} result] {
+        puts stderr "getID error: $result"
+        return -9
+    } else {
         return $result
     }
 }

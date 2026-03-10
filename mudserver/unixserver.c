@@ -40,7 +40,6 @@ typedef struct {
     ServerConfig *server_config;
 } ClientConnection;
 
-/* Thread function - handles a single client connection     */
 void *handle_client(void *arg)
 {
     ClientConnection *conn = (ClientConnection *)arg;
@@ -51,40 +50,45 @@ void *handle_client(void *arg)
     fprintf(stdout, "Client connected on socket %d.\n", conn->socket);
     fflush(stdout);
 
-    /* Read data from the socket */
-    reclen = 0;
-    while (reclen <= 0)
+    /* Loop handling requests until client disconnects */
+    while (1)
     {
         reclen = read(conn->socket, buffer, BUF_SIZE - 2);
-        if (reclen < 0)
+
+        if (reclen <= 0)
         {
-            fprintf(stderr, "Read error on socket %d (Error %d).\n", conn->socket, errno);
-            fflush(stderr);
-            close(conn->socket);
-            free(conn);
-            return NULL;
+            /* Client disconnected or error */
+            if (reclen == 0)
+                fprintf(stdout, "Client disconnected on socket %d.\n", conn->socket);
+            else
+                fprintf(stderr, "Read error on socket %d (Error %d).\n", conn->socket, errno);
+            fflush(stdout);
+            break;
         }
+
+        buffer[reclen] = '\0';
+
+        fprintf(stdout, "Processing: %s\n", buffer);
+        fflush(stdout);
+
+        pthread_mutex_lock(&parse_mutex);
+        parse_script(buffer, result, conn->server_config);
+        pthread_mutex_unlock(&parse_mutex);
+
+        if (write(conn->socket, result, strlen(result) + 1) < 0)
+        {
+            fprintf(stderr, "Write error on socket %d (Error %d).\n", conn->socket, errno);
+            fflush(stderr);
+            break;
+        }
+
+        fprintf(stdout, "Reply: %s\n", result);
+        fflush(stdout);
     }
-    buffer[reclen] = '\0';
 
-    fprintf(stdout, "Processing: %s\n", buffer);
-    fflush(stdout);
-
-    /* Lock the mutex before calling parse_script as it may  */
-    /* access shared state                                   */
-    pthread_mutex_lock(&parse_mutex);
-    parse_script(buffer, result, conn->server_config);
-    pthread_mutex_unlock(&parse_mutex);
-
-    write(conn->socket, result, strlen(result) + 1);
-
-    fprintf(stdout, "Reply: %s\n", result);
-    fflush(stdout);
-
-    /* Close the connection and free the connection struct   */
+    /* Clean up */
     close(conn->socket);
     free(conn);
-
     return NULL;
 }
 

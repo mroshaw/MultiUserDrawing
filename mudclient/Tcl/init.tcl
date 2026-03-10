@@ -112,6 +112,12 @@ set selectObj 1
 puts "All done! Lets do it!"
 catch {destroy .splash}
 
+puts "Connecting to server..."
+if {[serverConnect] == -9} {
+    puts "Failed to connect to server. Exiting."
+    exit
+}
+
 # What happens now is that the client sends a request to the server
 # to send it all object data...
 puts "Okay... Getting objects from server..."

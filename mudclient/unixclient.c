@@ -166,7 +166,7 @@ int process_string_cmd (ClientData clientData, Tcl_Interp *interp, int argc, cha
     }
     else
     {
-        fprintf(stderr, "mudClient (sendRevc - send): Cannot connect to the server.\n");
+        fprintf(stderr, "mudClient (sendRevc - send): not connected to a server!\n");
 		interp->result = "-9";
         return TCL_ERROR;
     }

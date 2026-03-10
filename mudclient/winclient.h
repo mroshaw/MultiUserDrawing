@@ -19,13 +19,17 @@
 void die();
 char* get_uid();
 
+// Network operations
+int connect_to_server(short port, char *server);
+void disconnect_from_server();
+
 /* Tcl command handlers */
+int connect_to_server_cmd     (ClientData clientData, Tcl_Interp *interp, int argc, char *argv[]);
+int disconnect_from_server_cmd    (ClientData clientData, Tcl_Interp *interp, int argc, char *argv[]);
 int get_uid_cmd         (ClientData clientData, Tcl_Interp *interp, int argc, char *argv[]);
 int send_string_cmd     (ClientData clientData, Tcl_Interp *interp, int argc, char *argv[]);
 int receive_string_cmd  (ClientData clientData, Tcl_Interp *interp, int argc, char *argv[]);
 int process_string_cmd  (ClientData clientData, Tcl_Interp *interp, int argc, char *argv[]);
-int open_socket_cmd     (ClientData clientData, Tcl_Interp *interp, int argc, char *argv[]);
-int close_socket_cmd    (ClientData clientData, Tcl_Interp *interp, int argc, char *argv[]);
 
 /* Socket operations */
 int  open_socket  (short port, char *server);

@@ -10,9 +10,9 @@ global OKAY,CREATEERROR,ENTERERROR, OBJECTERROR, DELETEERROR, EXISTERROF global 
 # Set up some standard error definitions
 proc initErrors {} {
     set OKAY	"1"
-    set CREATEERROR
-    set ENTERERROR
-    set OBJECTERROR
+    set CREATEERROR "-1"
+    set ENTERERROR "-2"
+    set OBJECTERROR "-3"
     set DELETEERROR	"-4"
     set EXISTERROR	"-5"
     set LOCKEDERROR	"-6"

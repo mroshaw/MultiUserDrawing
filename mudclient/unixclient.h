@@ -27,6 +27,8 @@ unsigned long get_host_address();
 
 int get_uid_cmd (ClientData clientData, Tcl_Interp *interp, int argc, char *argv[]);
 char* get_uid();
+int connect_to_server_cmd     (ClientData clientData, Tcl_Interp *interp, int argc, char *argv[]);
+int disconnect_from_server_cmd    (ClientData clientData, Tcl_Interp *interp, int argc, char *argv[]);
 int send_string_cmd (ClientData clientData, Tcl_Interp *interp, int argc, char *argv[]);
 int receive_string_cmd (ClientData clientData, Tcl_Interp *interp, int argc, char *argv[]);
 int process_string_cmd (ClientData clientData, Tcl_Interp *interp, int argc, char *argv[]);
