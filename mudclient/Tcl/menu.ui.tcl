@@ -50,7 +50,7 @@ proc menu_ui {root args} {
     grid $base.scriptMenu -in $root	-row 1 -column 5 -sticky nesw
     grid $base.windowMenu -in $root	-row 1 -column 6 -sticky nesw
     grid $base.debugMenu -in $root	-row 1 -column 7 -sticky nesw
-    grid $base.helpMenu -in $root -row 1 -column 9 -sticky nesw
+    grid $base.helpMenu -in $root -row 1 -column 8 -sticky nesw
 
     # Resize behavior management
     grid rowconfigure $root 1 -weight 0 -minsize 2
@@ -61,7 +61,7 @@ proc menu_ui {root args} {
     grid columnconfigure $root 5 -weight 0 -minsize 30
     grid columnconfigure $root 6 -weight 0 -minsize 30
     grid columnconfigure $root 7 -weight 0 -minsize 30
-    grid columnconfigure $root 8 -weight 1 -minsize 30
+    grid columnconfigure $root 8 -weight 0 -minsize 30
     grid columnconfigure $root 9 -weight 0 -minsize 30
     
     # additional interface code
@@ -96,6 +96,9 @@ proc menu_ui {root args} {
     $base.objectMenu.m add command -label "Rotate..." -command {doRotate $selectObj}
     $base.objectMenu.m add command -label "Scale..." -command {doScale $selectObj}
     # end additional interface code
+
+    # Handle window close button
+    wm protocol $root WM_DELETE_WINDOW {doQuit}
 }
 
 # Allow interface to be run "stand-alone" for testing

@@ -32,7 +32,7 @@ struct object {
 typedef struct object *Object;
 
 /* Function prototypes  */
-Object create_object(int client_id, int type, char name[20], int x1, int y1, int x2, int y2, char object_text[20]);
+Object create_object(int client_id, int type, char name[20], int x1, int y1, int x2, int y2, char object_text[255]);
 
 void dls_store(Object new_object, Object *start, Object *last);
 

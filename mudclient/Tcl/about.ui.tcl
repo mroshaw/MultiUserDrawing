@@ -17,14 +17,14 @@ proc about_ui {root args} {
     } else {
         set base $root
     }
-    image create photo pic -file [file join "C://MUD//MUDClient//Tcl//images//splash2.gif"]
+    image create photo pic -file [file join "./Tcl/images/splash2.gif"]
     
     label $base.picLabel \
     -text label \
     -image pic
     
     label $base.infoLabel \
-    -text {lain Ollerenshaw 1998}
+    -text {lain Ollerenshaw 1998, 2026}
 
     puts $root
     

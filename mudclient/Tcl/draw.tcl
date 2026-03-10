@@ -149,7 +149,7 @@ proc drawLine {canpath tag x1 y1 x2 y2 colour} {
 # commands to mouse events
 proc drawText {canpath tag x1 y1 text} {
     global objData
-    $canpath create text $x1 $y1 -text $text -tags $tag
+    $canpath create text $x1 $y1 -text $text -tags $tag -font {Helvetica 24}
     $canpath bind $tag <Button-1> {
         set tagname [%W gettags [%W find withtag current]]
         set theName [lindex $tagname 0]

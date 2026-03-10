@@ -7,6 +7,7 @@
 /* Date     Who     Comments            */
 /* 3/12/97  MND     Created             */
 /* 6/12/97  IO      Altered for MUD     */
+/* 10/3/26  IO      Added threading     */
 /*                                      */
 
 #include <errno.h>
@@ -19,6 +20,7 @@
 #include <sys/socket.h>
 #include <netdb.h>
 #include <unistd.h>
+#include <pthread.h>
 #include "unixserver.h"
 #include "parse.h"
 #include "server.h"
@@ -29,21 +31,72 @@
 /* shut it down nice and tidily at the end.                 */
 static int our_socket = 0;
 
-/* Hold them globally so we can perform server functions    */
-/* outside of run_server                                    */
-int them;
+/* Mutex to protect parse_script from concurrent access     */
+static pthread_mutex_t parse_mutex = PTHREAD_MUTEX_INITIALIZER;
+
+/* Structure to pass connection data to each thread         */
+typedef struct {
+    int socket;
+    ServerConfig *server_config;
+} ClientConnection;
+
+/* Thread function - handles a single client connection     */
+void *handle_client(void *arg)
+{
+    ClientConnection *conn = (ClientConnection *)arg;
+    int reclen = 0;
+    char buffer[BUF_SIZE];
+    char result[BUF_SIZE];
+
+    fprintf(stdout, "Client connected on socket %d.\n", conn->socket);
+    fflush(stdout);
+
+    /* Read data from the socket */
+    reclen = 0;
+    while (reclen <= 0)
+    {
+        reclen = read(conn->socket, buffer, BUF_SIZE - 2);
+        if (reclen < 0)
+        {
+            fprintf(stderr, "Read error on socket %d (Error %d).\n", conn->socket, errno);
+            fflush(stderr);
+            close(conn->socket);
+            free(conn);
+            return NULL;
+        }
+    }
+    buffer[reclen] = '\0';
+
+    fprintf(stdout, "Processing: %s\n", buffer);
+    fflush(stdout);
+
+    /* Lock the mutex before calling parse_script as it may  */
+    /* access shared state                                   */
+    pthread_mutex_lock(&parse_mutex);
+    parse_script(buffer, result, conn->server_config);
+    pthread_mutex_unlock(&parse_mutex);
+
+    write(conn->socket, result, strlen(result) + 1);
+
+    fprintf(stdout, "Reply: %s\n", result);
+    fflush(stdout);
+
+    /* Close the connection and free the connection struct   */
+    close(conn->socket);
+    free(conn);
+
+    return NULL;
+}
 
 /* Do the server loop */
 void run_server(ServerConfig *server_config)
 {
     int port;
     int their_namelen;
-    int reclen;
     int opt = 1;
+    int them;
     struct sockaddr_in our_name;
     struct sockaddr_in their_name;
-    char buffer[BUF_SIZE];
-    char result[BUF_SIZE];
 
     fprintf(stdout, "Creating socket...\n");
     fflush(stdout);
@@ -55,9 +108,6 @@ void run_server(ServerConfig *server_config)
         exit(1);
     }
 
-    // fprintf(stdout, "Socket result: %d (errno: %d)\n", our_socket, errno);
-    // fflush(stdout);
-
     /* Allow socket reuse to avoid "address already in use" on restart */
     if (setsockopt(our_socket, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0)
     {
@@ -66,12 +116,10 @@ void run_server(ServerConfig *server_config)
     }
 
     fprintf(stdout, "Socket successfully created.\n");
+    fflush(stdout);
 
-    /* Initialise the socket data structure - we use a port     */
-    /* number which is known to the client and we don't care    */
-    /* what machine we are running on (INADDR_ANY).             */
     port = string_to_int(server_config->server_port);
-    // port = 1992;
+
     fprintf(stdout, "Binding to port %d...\n", port);
     fflush(stdout);
 
@@ -92,58 +140,53 @@ void run_server(ServerConfig *server_config)
 
     /* Trap some of the more interesting signals */
     if (signal(SIGINT,  SIG_IGN) != SIG_IGN)
-        signal(SIGINT,  interrupt);     /* Trap Interrupt (Ctrl-C) */
+        signal(SIGINT,  interrupt);     /* Trap Interrupt (Ctrl-C)      */
 
     if (signal(SIGSEGV, SIG_IGN) != SIG_IGN)
-        signal(SIGSEGV, segmentation);  /* Trap Segmentation violation */
+        signal(SIGSEGV, segmentation);  /* Trap Segmentation violation  */
 
     if (signal(SIGBUS,  SIG_IGN) != SIG_IGN)
-        signal(SIGBUS,  bus);           /* Trap Bus error */
+        signal(SIGBUS,  bus);           /* Trap Bus error               */
 
     if (signal(SIGTERM, SIG_IGN) != SIG_IGN)
-        signal(SIGTERM, terminate);     /* Trap Terminate */
+        signal(SIGTERM, terminate);     /* Trap Terminate               */
 
-    /* Loop waiting for connections. If there are more than 5   */
-    /* connections waiting to be processed then any new client  */
-    /* will get ECONNREFUSED when they connect().               */
     listen(our_socket, 5);
 
-    fprintf(stdout, "Server: Running!\n");
+    fprintf(stdout, "Server: Running! (threaded)\n");
     fflush(stdout);
 
     while (1)
     {
-        /* Initialise their_namelen before passing to accept */
         their_namelen = sizeof(their_name);
 
-        /* Got a connection - try and accept it. */
         if ((them = accept(our_socket, (struct sockaddr *)&their_name, &their_namelen)) >= 0)
         {
-            /* We now have a file descriptor we can read/write to. */
-            fprintf(stdout, "Client connected.\n");
-            fflush(stdout);
-
-            /* Loop reading all the data from the socket. */
-            reclen = 0;
-            while (reclen <= 0)
+            /* Allocate a connection struct to pass to the thread */
+            ClientConnection *conn = malloc(sizeof(ClientConnection));
+            if (conn == NULL)
             {
-                reclen = read(them, buffer, BUF_SIZE - 2);
+                fprintf(stderr, "Failed to allocate connection struct.\n");
+                fflush(stderr);
+                close(them);
+                continue;
             }
-            buffer[reclen] = '\0';
+            conn->socket        = them;
+            conn->server_config = server_config;
 
-            /* Pass the string to the parser */
-            fprintf(stdout, "Processing: %s\n", buffer);
-            fflush(stdout);
+            /* Spawn a thread to handle this connection */
+            pthread_t thread;
+            if (pthread_create(&thread, NULL, handle_client, conn) != 0)
+            {
+                fprintf(stderr, "Failed to create thread (Error %d).\n", errno);
+                fflush(stderr);
+                close(them);
+                free(conn);
+                continue;
+            }
 
-            parse_script(buffer, result, server_config);
-
-            write(them, result, strlen(result) + 1);
-
-            fprintf(stdout, "Reply: %s\n", result);
-            fflush(stdout);
-
-            /* Close the connection */
-            close(them);
+            /* Detach the thread so it cleans up automatically when done */
+            pthread_detach(thread);
         }
         else
         {
@@ -186,6 +229,7 @@ void terminate()
 void die(int value)
 {
     fprintf(stderr, "Server %s shutting down.\n", SERVER_NAME);
+    pthread_mutex_destroy(&parse_mutex);
     close(our_socket);
     exit(value);
 }

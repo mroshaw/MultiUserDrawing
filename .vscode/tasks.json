@@ -33,6 +33,14 @@
             "group": "build",
             "problemMatcher": "$gcc"
         },
+                {
+            "label": "Deploy Client",
+            "type": "shell",
+            "command": "D:/Dev/cygwin64/bin/bash.exe",
+            "args": [ "--login", "-c", "cd /cygdrive/e/Dev/MultiUserDrawing/mudclient && make deploy" ],
+            "group": "build",
+            "problemMatcher": "$gcc"
+        },
         {
             "label": "Clean All",
             "type": "shell",

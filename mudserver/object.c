@@ -42,7 +42,7 @@ Object find_object(char *name) {
 }
 
 /* Creates and returns a new object. Returns NULL if unsuccessful */
-Object create_object(int client_id, int type, char name[20], int x1, int y1, int x2, int y2, char object_text[20]) {
+Object create_object(int client_id, int type, char name[20], int x1, int y1, int x2, int y2, char object_text[255]) {
     Object new_object = (Object) safe_malloc(sizeof(struct object));
     if (new_object != NULL) {
         new_object->type = type;
