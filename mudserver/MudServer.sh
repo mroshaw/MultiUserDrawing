@@ -1,1 +1,0 @@
-./MUDServer.exe $1
