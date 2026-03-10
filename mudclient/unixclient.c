@@ -13,6 +13,7 @@
 #define USE_INTERP_ERRORLINE
 
 #include <ctype.h>
+#include <sys/types.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
 #include <netdb.h>
@@ -23,16 +24,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <memory.h>
-#include <sys/types.h>
 #include <fcntl.h>
 #include <tcl.h>
 #include <unistd.h>
 #include "tclInit.h"
-#include "client.h"
-#include "utils.h"
+#include "unixclient.h"
+#include "common/utils.h"
+#include "limits.h"
+
+#ifndef u_long
+typedef unsigned long u_long;
+#endif
 
 /* Hold our socket globally for ease	*/
 static int our_socket = 0;
+char *tcl_init_path;
 
 u_long get_host_address(char *host)
 {
@@ -115,7 +121,7 @@ void die(int value)
 /* and receiving of strings. They are directly linked to Tcl commands */
 /* which facilitates communication between the GUI layer and the client */
 /* C layer	*/
-int sendStringCmd (ClientData clientData, Tcl_Interp *interp, int argc, char *argv[])
+int send_string_cmd (ClientData clientData, Tcl_Interp *interp, int argc, char *argv[])
 {
 	int thePort;
 	if (argc != 4) {
@@ -124,7 +130,7 @@ int sendStringCmd (ClientData clientData, Tcl_Interp *interp, int argc, char *ar
 		exit(0);
 	}
 	thePort = atoi (argv[2]);
-	if (openSocket(thePort, argv[3]) == 0)
+	if (open_socket(thePort, argv[3]) == 0)
     {
         send (our_socket, argv[1], BUF_SIZE, 0);
         return TCL_OK;
@@ -137,7 +143,7 @@ int sendStringCmd (ClientData clientData, Tcl_Interp *interp, int argc, char *ar
     }
 }
 
-int processStringCmd (ClientData clientData, Tcl_Interp *interp, int argc, char *argv[])
+int process_string_cmd (ClientData clientData, Tcl_Interp *interp, int argc, char *argv[])
 {
 	int thePort;
 	int reclen = 0;
@@ -152,7 +158,7 @@ int processStringCmd (ClientData clientData, Tcl_Interp *interp, int argc, char 
 	}
 	// Open soecket
 	thePort = atoi (argv[2]);
-	if (openSocket(thePort, argv[3]) == 0)
+	if (open_socket(thePort, argv[3]) == 0)
     {
         // Send
         // send (our_socket, argv[1], BUF_SIZE, 0);
@@ -191,7 +197,7 @@ int processStringCmd (ClientData clientData, Tcl_Interp *interp, int argc, char 
 	return TCL_OK;
 }
 
-int receiveStringCmd (ClientData clientData, Tcl_Interp *interp, int argc, char *argv[])
+int receive_string_cmd (ClientData clientData, Tcl_Interp *interp, int argc, char *argv[])
 {
 	int reclen = 0;
 	static char theString[BUF_SIZE];
@@ -211,8 +217,13 @@ int receiveStringCmd (ClientData clientData, Tcl_Interp *interp, int argc, char 
 	return TCL_OK;
 }
 
+void open_socket_cmd(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[])
+{
+	// TODO: Check args
+}
+
 /* Open the socket connection */
-int openSocket (short port, char *server)
+int open_socket (short port, char *server)
 {
 	/* Define the socket structure */
 	struct sockaddr_in our_name;
@@ -239,6 +250,11 @@ int openSocket (short port, char *server)
 	return 0;
 }
 
+void close_socket_cmd(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[])
+{
+	closeSocket();
+}
+
 /* Close the socket connection	*/
 void closeSocket()
 {
@@ -248,14 +264,19 @@ void closeSocket()
 }
 
 /* Get the users unique id	*/
-int getUIDCmd (ClientData clientData, Tcl_Interp *interp, int argc, char *argv[])
+int get_uid_cmd (ClientData clientData, Tcl_Interp *interp, int argc, char *argv[])
 {
-	static char theId[20];
-    /* int cId = (int)getuid(); */
-	int cId = 1;
-	my_itoa(cId, theId);
+	char* theId = get_uid();
 	interp->result=theId;
 	return TCL_OK;
 }
 
+char* get_uid()
+{
+	static char theId[20];
+    int cId = (int)getuid();
+	/* int cId = 1; */
+	int_to_string(cId, theId);
+	return theId;
+}
 

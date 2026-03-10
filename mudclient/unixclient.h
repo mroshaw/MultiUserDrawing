@@ -14,6 +14,8 @@
 #define SERVER_ADDR "localhost"
 #define BUF_SIZE 1024
 
+int main(int argc, char *argv[]);
+
 void die();
 void logon();
 
@@ -23,9 +25,12 @@ int bus();
 int terminate();
 unsigned long get_host_address();
 
-int getUIDCmd (ClientData clientData, Tcl_Interp *interp, int argc, char *argv[]);
-int sendStringCmd (ClientData clientData, Tcl_Interp *interp, int argc, char *argv[]);
-int receiveStringCmd (ClientData clientData, Tcl_Interp *interp, int argc, char *argv[]);
-int processStringCmd (ClientData clientData, Tcl_Interp *interp, int argc, char *argv[]);
+int get_uid_cmd (ClientData clientData, Tcl_Interp *interp, int argc, char *argv[]);
+char* get_uid();
+int send_string_cmd (ClientData clientData, Tcl_Interp *interp, int argc, char *argv[]);
+int receive_string_cmd (ClientData clientData, Tcl_Interp *interp, int argc, char *argv[]);
+int process_string_cmd (ClientData clientData, Tcl_Interp *interp, int argc, char *argv[]);
+void open_socket_cmd(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[]);
+void close_socket_cmd(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[]);
+int open_socket (short port, char *server);
 void closeSocket ();
-int openSocket (short port, char *server);

@@ -1,11 +1,3 @@
-//
-// Created by mrosh on 12/07/2024.
-//
-
-#include "serverconfig.h"
-//
-// Created by mrosh on 12/07/2024.
-//
 #include "serverconfig.h"
 
 #include <stdlib.h>

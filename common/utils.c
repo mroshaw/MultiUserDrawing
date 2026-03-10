@@ -35,19 +35,9 @@ void string_to_upper(char *nl, char *n2) {
 }
 
 /* Convert a string to an int */
-int string_to_int(char *nl) {
-    int i = 0;
-    int result = 0;
-    int t;
-    /* int l = strlen(nl); */
-    while (nl[i] != '\0')
-        t = nl[i] - '0';
-    fprintf(stdout, "t = %i\n", t);
-    result += t * ((1 - i - 1) * 10);
-
-    fprintf(stdout, "result = %i\n", result);
-    i++;
-    return result;
+int string_to_int(char *nl)
+{
+    return atoi(nl);
 }
 
 /* Generic procedure to convert integer to a string */
@@ -127,3 +117,4 @@ char *str_replace(char *orig, char *rep, char *with) {
     strcpy(tmp, orig);
     return result;
 }
+

@@ -1,221 +1,199 @@
-//
-// Created by mrosh on 11/07/2024.
-//
-/*	client.c		                                                                        */
-/*	Code to set up Tcl interpreter, initialise the Tcl scripts and handle client socket		*/
-/*	requests		                                                                        */
-/*                                                                                          */
-/*	Iain Ollerenshaw 16/2/98	                                                        	*/
-/*                                                                                          */
-/*	Version History:	                                                                	*/
-/*	Date	Who     Comments	                                                            */
-/*	        MND	    Created	                                                                */
-/*	16/2/98 IO      Altered for MUD		                                                    */
-/*			                                                                                */
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+/* winclient.c                                                      */
+/* Windows Winsock2 implementation of the client network layer      */
+/* Replaces unixclient.c for native Windows builds                  */
+/*                                                                  */
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <winsock2.h>
 #include <ws2tcpip.h>
-#include <stdlib.h>
-#include <stdio.h>
-
-#include "winclient.h"
-
 #include <tcl.h>
+#include "winclient.h"
+#include "common/utils.h"
 
-#include "../common/utils.h"
+/* Hold our socket globally for ease */
+static SOCKET our_socket = INVALID_SOCKET;
 
-// Need to link with Ws2_32.lib, Mswsock.lib, and Advapi32.lib
-#pragma comment (lib, "Ws2_32.lib")
-#pragma comment (lib, "Mswsock.lib")
-#pragma comment (lib, "AdvApi32.lib")
-
-#define DEFAULT_BUFLEN 512
-#define DEFAULT_PORT "1992"
-
-SOCKET global_socket = INVALID_SOCKET;
-
-SOCKET server_connect(char *server_ip, char *server_port) {
+/* Initialise Winsock - must be called before any socket operations */
+static int init_winsock()
+{
     WSADATA wsa_data;
-    struct addrinfo *result = NULL,
-            *ptr = NULL,
-            hints;
-    const char *sendbuf = "this is a test";
-    char recvbuf[DEFAULT_BUFLEN];
-    int winsock_result;
-    int recvbuflen = DEFAULT_BUFLEN;
-
-    // Initialize Winsock
-    winsock_result = WSAStartup(MAKEWORD(2, 2), &wsa_data);
-    if (winsock_result != 0) {
-        fprintf(stderr, "WSAStartup failed with error: %d\n", winsock_result);
-        return INVALID_SOCKET;
+    int result = WSAStartup(MAKEWORD(2, 2), &wsa_data);
+    if (result != 0) {
+        fprintf(stderr, "WSAStartup failed: %d\n", result);
+        return -1;
     }
-
-    ZeroMemory(&hints, sizeof(hints));
-    hints.ai_family = AF_UNSPEC;
-    hints.ai_socktype = SOCK_STREAM;
-    hints.ai_protocol = IPPROTO_TCP;
-
-    // Resolve the server address and port
-    winsock_result = getaddrinfo(server_ip, server_port, &hints, &result);
-    if (winsock_result != 0) {
-        fprintf(stderr, "getaddrinfo failed with error: %d\n", winsock_result);
-        WSACleanup();
-        return 1;
-    }
-
-    // Attempt to connect to an address until one succeeds
-    for (ptr = result; ptr != NULL; ptr = ptr->ai_next) {
-        // Create a SOCKET for connecting to server
-        global_socket = socket(ptr->ai_family, ptr->ai_socktype,
-                               ptr->ai_protocol);
-        if (global_socket == INVALID_SOCKET) {
-            fprintf(stderr, "socket failed with error: %ld\n", WSAGetLastError());
-            WSACleanup();
-            return INVALID_SOCKET;
-        }
-
-        // Connect to server.
-        winsock_result = connect(global_socket, ptr->ai_addr, (int) ptr->ai_addrlen);
-        if (winsock_result == SOCKET_ERROR) {
-            closesocket(global_socket);
-            global_socket = INVALID_SOCKET;
-            continue;
-        }
-        break;
-    }
-
-    freeaddrinfo(result);
-
-    if (global_socket == INVALID_SOCKET) {
-        fprintf(stderr, "Unable to connect to server!\n");
-        WSACleanup();
-        return INVALID_SOCKET;
-    }
-
-    return global_socket;
+    return 0;
 }
 
-int server_disconnect(SOCKET connect_socket) {
-    // shutdown the connection since no more data will be sent
-
-    int winsock_result = shutdown(connect_socket, SD_SEND);
-    if (winsock_result == SOCKET_ERROR) {
-        fprintf(stderr, "shutdown failed with error: %d\n", WSAGetLastError());
-        closesocket(connect_socket);
-        WSACleanup();
-        return 1;
-    }
-
-    // cleanup
-    closesocket(connect_socket);
+void die()
+{
+    close_socket();
     WSACleanup();
-
-    return 0;
+    exit(1);
 }
 
-int server_send(SOCKET connect_socket, char *send_buf) {
-    int winsock_result = send(connect_socket, send_buf, DEFAULT_BUFLEN, 0);
-    if (winsock_result == SOCKET_ERROR) {
-        fprintf(stderr, "send failed with error: %d\n", WSAGetLastError());
-        closesocket(connect_socket);
-        WSACleanup();
-        return 1;
-    }
-
-    fprintf(stdout, "\nClient sent: %s\n", send_buf);
-    return 0;
-}
-
-int server_receive(SOCKET connect_socket, char *rec_buf) {
-    int winsock_result = recv(connect_socket, rec_buf, DEFAULT_BUFLEN, 0);
-    if (winsock_result > 0) {
-        fprintf(stdout, "Message received: %s\n", rec_buf);
-    } else if (winsock_result == 0) {
-        fprintf(stdout, "Connection closed\n");
-    } else {
-        fprintf(stderr, "recv failed with error: %d\n", WSAGetLastError());
-    }
-    return winsock_result;
-}
-
-int server_send_receive(SOCKET connect_socket, char *send_buf, char *rec_buf) {
-    int winsock_result = send(connect_socket, send_buf, DEFAULT_BUFLEN, 0);
-    if (winsock_result == SOCKET_ERROR) {
-        fprintf(stderr, "send failed with error: %d\n", WSAGetLastError());
-        closesocket(connect_socket);
-        WSACleanup();
-        return winsock_result;
-    }
-
-    winsock_result = recv(connect_socket, rec_buf, DEFAULT_BUFLEN, 0);
-    if (winsock_result > 0) {
-        fprintf(stdout, "Message received: %s\n", rec_buf);
-    } else if (winsock_result == 0)
-        fprintf(stdout, "Connection closed\n");
-    else
-        fprintf(stderr, "recv failed with error: %d\n", WSAGetLastError());
-    fprintf(stdout, "Command processed.\n");
-
-    return winsock_result;
-}
-
-int close_client_cmd(ClientData client_data, Tcl_Interp *interp, int argc, char *argv[]) {
-    server_disconnect(global_socket);
-    return TCL_OK;
-}
-
-/* These client commands handle, at a more abstract level, the sending */
-/* and receiving of strings. They are directly linked to Tcl commands */
-/* which facilitates communication between the GUI layer and the client */
-/* C layer	*/
-int send_string_cmd(ClientData client_data, Tcl_Interp *interp, int argc, char *argv[]) {
-    if (argc != 4) {
-        fprintf(stderr, "Wrong number of args to 'send_string_cmd'!: %i\n",
-                argc);
-        exit(0);
-    }
-
-    int winsock_result = server_send(global_socket, argv[1]);
-
-    if (winsock_result != 0) {
-        return TCL_ERROR;
-    }
-    return TCL_OK;
-}
-
-int process_string_cmd(ClientData client_data, Tcl_Interp *interp, int argc, char *argv[]) {
-    char recbuf[DEFAULT_BUFLEN];
-    int winsock_result = server_send(global_socket, argv[1]);
-    if (winsock_result != 0) {
-        return TCL_ERROR;
-    }
-    winsock_result = server_receive(global_socket, recbuf);
-    if (winsock_result < 0) {
-        return TCL_ERROR;
-    }
-    Tcl_SetResult(interp, recbuf, TCL_VOLATILE );
-    return TCL_OK;
-}
-
-int receive_string_cmd(ClientData client_data, Tcl_Interp *interp, int argc, char *argv[]) {
-    // Send an initial buffer
-    char recbuf[DEFAULT_BUFLEN];
-    int winsock_result = server_receive(global_socket, recbuf);
-    if (winsock_result != 0) {
-        return TCL_ERROR;
-    }
-    Tcl_SetResult(interp, recbuf, TCL_VOLATILE);
-    return TCL_OK;
-}
-
-/* Get the users unique id	*/
-int get_uid_cmd(ClientData client_data, Tcl_Interp *interp, int argc, char *argv[]) {
-    static char client_id[20];
-    /* int cId = (int)getuid(); */
+char* get_uid()
+{
+    static char theId[20];
     int cId = 1;
-    int_to_string(cId, client_id);
-    Tcl_SetResult(interp, client_id, TCL_VOLATILE);
+    int_to_string(cId, theId);
+    return theId;
+}
+
+int get_uid_cmd(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[])
+{
+    char *theId = get_uid();
+    Tcl_SetResult(interp, theId, TCL_STATIC);
+    return TCL_OK;
+}
+
+/* Open the socket connection */
+int open_socket(short port, char *server)
+{
+    struct sockaddr_in server_addr;
+    struct hostent *host_entry;
+
+    fprintf(stdout, "Attempting to connect to server %s on port %d\n", server, port);
+
+    if (init_winsock() != 0)
+        return -1;
+
+    /* Create socket */
+    our_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (our_socket == INVALID_SOCKET) {
+        fprintf(stderr, "Failed to create socket: %d\n", WSAGetLastError());
+        WSACleanup();
+        return -1;
+    }
+
+    /* Resolve host */
+    host_entry = gethostbyname(server);
+    if (host_entry == NULL) {
+        fprintf(stderr, "Could not resolve host: %s\n", server);
+        closesocket(our_socket);
+        WSACleanup();
+        return -1;
+    }
+
+    /* Set up address */
+    memset(&server_addr, 0, sizeof(server_addr));
+    server_addr.sin_family = AF_INET;
+    server_addr.sin_port = htons(port);
+    server_addr.sin_addr.s_addr = ((struct in_addr *)(host_entry->h_addr))->s_addr;
+
+    /* Connect */
+    if (connect(our_socket, (struct sockaddr *)&server_addr, sizeof(server_addr)) == SOCKET_ERROR) {
+        fprintf(stderr, "Cannot connect to server: %d\n", WSAGetLastError());
+        closesocket(our_socket);
+        WSACleanup();
+        return -1;
+    }
+
+    fprintf(stdout, "Connected to server %s on port %d\n", server, port);
+
+    return 0;
+}
+
+/* Close the socket connection */
+void close_socket()
+{
+    if (our_socket != INVALID_SOCKET) {
+        shutdown(our_socket, SD_BOTH);
+        closesocket(our_socket);
+        our_socket = INVALID_SOCKET;
+    }
+    WSACleanup();
+}
+
+int send_string_cmd(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[])
+{
+    int thePort;
+    if (argc != 4) {
+        fprintf(stderr, "Wrong number of args to send: %i\n", argc);
+        return TCL_ERROR;
+    }
+    thePort = atoi(argv[2]);
+    if (open_socket(thePort, argv[3]) == 0) {
+        send(our_socket, argv[1], BUF_SIZE, 0);
+        return TCL_OK;
+    } else {
+        fprintf(stderr, "winclient (send): Cannot connect to server.\n");
+        Tcl_SetResult(interp, "-9", TCL_STATIC);
+        return TCL_ERROR;
+    }
+}
+
+int process_string_cmd(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[])
+{
+    int thePort;
+    int reclen = 0;
+    static char theResult[BUF_SIZE];
+
+    if (argc != 4) {
+        fprintf(stderr, "Wrong number of args to send: %i\n", argc);
+        return TCL_ERROR;
+    }
+    thePort = atoi(argv[2]);
+    if (open_socket(thePort, argv[3]) != 0) {
+        fprintf(stderr, "winclient (process): Cannot connect to server.\n");
+        Tcl_SetResult(interp, "-9", TCL_STATIC);
+        return TCL_ERROR;
+    }
+
+    /* Send */
+    send(our_socket, argv[1], BUF_SIZE, 0);
+
+    /* Receive response */
+    while (reclen == 0)
+        reclen = recv(our_socket, theResult, BUF_SIZE - 2, 0);
+
+    if (reclen < 0) {
+        fprintf(stderr, "winclient (process): Failed to receive response.\n");
+        Tcl_SetResult(interp, "-9", TCL_STATIC);
+        return TCL_ERROR;
+    }
+
+    theResult[reclen] = '\0';
+    Tcl_SetResult(interp, theResult, TCL_STATIC);
+    close_socket();
+    return TCL_OK;
+}
+
+int receive_string_cmd(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[])
+{
+    int reclen = 0;
+    static char theResult[BUF_SIZE];
+
+    reclen = recv(our_socket, theResult, BUF_SIZE - 2, 0);
+    if (reclen <= 0) {
+        fprintf(stderr, "winclient (recv): Cannot receive from server.\n");
+        Tcl_SetResult(interp, "-9", TCL_STATIC);
+        return TCL_ERROR;
+    }
+    theResult[reclen] = '\0';
+    Tcl_SetResult(interp, theResult, TCL_STATIC);
+    close_socket();
+    return TCL_OK;
+}
+
+int open_socket_cmd(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[])
+{
+    int thePort;
+    if (argc != 3) {
+        fprintf(stderr, "Wrong number of args to openClient: %i\n", argc);
+        return TCL_ERROR;
+    }
+    thePort = atoi(argv[1]);
+    if (open_socket(thePort, argv[2]) != 0) {
+        Tcl_SetResult(interp, "-9", TCL_STATIC);
+        return TCL_ERROR;
+    }
+    return TCL_OK;
+}
+
+int close_socket_cmd(ClientData clientData, Tcl_Interp *interp, int argc, char *argv[])
+{
+    close_socket();
     return TCL_OK;
 }

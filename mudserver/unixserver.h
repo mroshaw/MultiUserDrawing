@@ -9,8 +9,14 @@
 /* 6/12/97  IO	    Altered for MUD	    */
 /*	                                    */
 
+#include "serverconfig.h"
+
+#define BUF_SIZE        1024
+#define SERVER_NAME     "MUDServer"
+#define PORT            1992
+
 /* Routines specific to this server. */
-void runServer(ServerDetails *details);
+void run_server(ServerConfig *server_config);
 void die();
 void welcome();
 
@@ -20,5 +26,6 @@ void segmentation();
 void bus();
 void terminate();
 unsigned long get_host_address();
+
 /* Useful system routines. */
 FILE *input();

@@ -1,0 +1,61 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build All",
+            "type": "shell",
+            "command": "D:/Dev/cygwin64/bin/bash.exe",
+            "args": [ "--login", "/cygdrive/e/Dev/MultiUserDrawing/build.sh" ],
+            "group": { "kind": "build", "isDefault": true },
+            "problemMatcher": "$gcc"
+        },
+        {
+            "label": "Build Server",
+            "type": "shell",
+            "command": "D:/Dev/cygwin64/bin/bash.exe",
+            "args": [ "--login", "-c", "cd /cygdrive/e/Dev/MultiUserDrawing/mudserver && make" ],
+            "group": "build",
+            "problemMatcher": "$gcc"
+        },
+        {
+            "label": "Build Windows Client",
+            "type": "shell",
+            "command": "D:/Dev/cygwin64/bin/bash.exe",
+            "args": [ "--login", "-c", "cd /cygdrive/e/Dev/MultiUserDrawing/mudclient && make windows" ],
+            "group": "build",
+            "problemMatcher": "$gcc"
+        },
+        {
+            "label": "Build Unix Client",
+            "type": "shell",
+            "command": "D:/Dev/cygwin64/bin/bash.exe",
+            "args": [ "--login", "-c", "cd /cygdrive/e/Dev/MultiUserDrawing/mudclient && make unix" ],
+            "group": "build",
+            "problemMatcher": "$gcc"
+        },
+        {
+            "label": "Clean All",
+            "type": "shell",
+            "command": "D:/Dev/cygwin64/bin/bash.exe",
+            "args": [ "--login", "-c", "cd /cygdrive/e/Dev/MultiUserDrawing/mudserver && make clean && cd /cygdrive/e/Dev/MultiUserDrawing/mudclient && make clean" ],
+            "group": "build",
+            "problemMatcher": "$gcc"
+        },
+        {
+            "label": "Clean Server",
+            "type": "shell",
+            "command": "D:/Dev/cygwin64/bin/bash.exe",
+            "args": [ "--login", "-c", "cd /cygdrive/e/Dev/MultiUserDrawing/mudserver && make clean" ],
+            "group": "build",
+            "problemMatcher": "$gcc"
+        },
+        {
+            "label": "Clean Client",
+            "type": "shell",
+            "command": "D:/Dev/cygwin64/bin/bash.exe",
+            "args": [ "--login", "-c", "cd /cygdrive/e/Dev/MultiUserDrawing/mudclient && make clean" ],
+            "group": "build",
+            "problemMatcher": "$gcc"
+        }
+    ]
+}

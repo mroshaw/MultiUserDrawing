@@ -14,16 +14,11 @@
 #include <stdlib.h>
 #include "object.h"
 #include "parse.h"
-#ifdef __WIN32__
-#include "winserver.h"
-#else
 #include "unixserver.h"
-#endif
 #include "file.h"
 #include "../common/utils.h"
 #include "scene.h"
 #include "server.h"
-#include "serverconfig.h"
 
 /* The scene simply represents a doubly linked list of objects */
 /* Contained globally for simplicity	*/
