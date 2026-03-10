@@ -18,6 +18,8 @@ proc makeCircle {canpath x1 y1 x2 y2} {
     
     set name [txtDiag .m {Creating..} {Enter name for circle:} {} 0 Okay Cancel]
     
+    regsub -all {\s} $name "" name
+
     if {$name != ""} {
         # Create circle in database
         set result [create circle $name $x1 $y1 $x2 $y2]

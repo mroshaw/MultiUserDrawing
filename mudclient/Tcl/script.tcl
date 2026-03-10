@@ -53,7 +53,7 @@ proc delete {name} {
     # command stringSendCmd which sends the string to
     # the server.
     set theResult [stringSendReceive $theString]
-    puts "TCL: delete result is $theResult"
+
     if {$theResult == "-9"} {
         dialog .error {Script Error} \
           {The server is not responding. Please contact your systems administrator and ensure that the server is back up before clicking continue.}\
