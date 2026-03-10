@@ -52,8 +52,9 @@ proc delete {name} {
     # This is turn passes the string to the C
     # command stringSendCmd which sends the string to
     # the server.
-   set result [stringSendReceive $theString]
-    if {$result == "-9"} {
+    set theResult [stringSendReceive $theString]
+    puts "TCL: delete result is $theResult"
+    if {$theResult == "-9"} {
         dialog .error {Script Error} \
           {The server is not responding. Please contact your systems administrator and ensure that the server is back up before clicking continue.}\
           {warning} 0 {Continue}
@@ -143,7 +144,7 @@ proc drawAll {method} {
    global clientId
    global objData objList selectObj
 
-   puts "TCL: In drawAll..."
+   # puts "TCL: In drawAll..."
 
    set theString ""
    set theResult ""
@@ -154,9 +155,9 @@ proc drawAll {method} {
    set theString [concat $theString "DRAWALL"]
    set test [catch {set numObj [llength $objList]}]
 
-   puts "TCL: Getting num objects..."
+   # puts "TCL: Getting num objects..."
    set numObjects [stringSendReceive $theString]
-   puts "TCL: Got num objects: numObjects..."
+   # puts "TCL: Got num objects: numObjects..."
 
    if {$test != 0} {
        set numObj 0
